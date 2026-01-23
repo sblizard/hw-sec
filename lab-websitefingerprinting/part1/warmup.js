@@ -1,48 +1,45 @@
 const runs = 10;
 
 function measureOneLine() {
-  const LINE_SIZE = 16; // 128/sizeof(double) Note that js treats all numbers as double
-  let result = [];
+	const LINE_SIZE = 16; // 128/sizeof(double) Note that js treats all numbers as double
+	let result = [];
 
-  // Fill with -1 to ensure allocation
-  const M = new Array(runs * LINE_SIZE).fill(-1);
+	// Fill with -1 to ensure allocation
+	const M = new Array(runs * LINE_SIZE).fill(-1);
 
-  for (let i = 0; i < runs; i++) {
-    const start = performance.now();
-    let val = M[i * LINE_SIZE];
-    const end = performance.now();
+	for (let i = 0; i < runs; i++) {
+		const start = performance.now();
+		let val = M[i * LINE_SIZE];
+		const end = performance.now();
 
-    result.push(end - start);
-  }
+		result.push(end - start);
+	}
 
-  return result;
+	return result;
 }
 
 function measureNLines() {
-  const LINE_SIZE = 16; // 128/sizeof(double) Note that js treats all numbers as double
-  const NUM_LINES = 10000000;
-  let result = [];
-  const M = new Array(LINE_SIZE * NUM_LINES).fill(-1);
-  for (let i = 0; i < runs; i++) {
-    const start = performance.now();
-    // access N lines
-    for (let a = 0; a < NUM_LINES; a++) {
-      let val = M[a * LINE_SIZE];
-    }
-    const end = performance.now();
+	const LINE_SIZE = 16; // 128/sizeof(double) Note that js treats all numbers as double
+	const NUM_LINES = 10000000;
+	let result = [];
+	const M = new Array(LINE_SIZE * NUM_LINES).fill(-1);
+	for (let i = 0; i < runs; i++) {
+		const start = performance.now();
+		// access N lines
+		for (let a = 0; a < NUM_LINES; a++) {
+			let val = M[a * LINE_SIZE];
+		}
+		const end = performance.now();
 
-    result.push(end - start);
-  }
+		result.push(end - start);
+	}
 
-  console.log(result.sort()[result.length / 2]);
-  return result;
+	console.log(result.sort()[result.length / 2]);
+	return result;
 }
 
+document.getElementById("exercise1-values").innerText =
+	`1 Cache Line: [${measureOneLine().join(", ")}]`;
 
-document.getElementById(
-  "exercise1-values"
-).innerText = `1 Cache Line: [${measureOneLine().join(", ")}]`;
-
-document.getElementById(
-  "exercise2-values"
-).innerText = `N Cache Lines: [${measureNLines().join(", ")}]`;
+document.getElementById("exercise2-values").innerText =
+	`N Cache Lines: [${measureNLines().join(", ")}]`;
