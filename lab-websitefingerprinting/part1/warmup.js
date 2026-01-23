@@ -20,8 +20,24 @@ function measureOneLine() {
 
 function measureNLines() {
   let result = [];
-
   // TODO: Exercise 1-1
+
+  const LINE_SIZE = 16;
+  let N = 8000000;
+  const M = new Array(N * LINE_SIZE).fill(-1);
+
+    for(let j = 0; j < runs; j++) {
+
+      const start = performance.now();
+
+      for (let i = 0; i < N; i++) {
+        let val = M[i*LINE_SIZE];
+      }
+
+      const end = performance.now();
+      result.push(end-start);
+
+    }
 
   return result;
 }
