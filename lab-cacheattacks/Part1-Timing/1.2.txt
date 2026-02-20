@@ -1,1 +1,4 @@
-
+     Cache Line Size  Total Size  Number of Ways (Associativity)  Number of Sets  Raw Latency
+L1      64 Bytes         32 KB                 8                         64            Wikichip is down...
+L2      64 Bytes          1 MB                16                       1024
+L3      64 Bytes         11 MB                11                      16384
