@@ -31,16 +31,16 @@ int main (int ac, char **av) {
 
     // [1.2] TODO: Uncomment the following line to allocate a buffer of a size
     // of your chosing. This will help you measure the latencies at L2 and L3.
-    // This buffer is the size of 512, which is enough to evict L1. 
-    uint64_t *l2_eviction_buffer = (uint64_t *)malloc(512*8*sizeof(uint64_t));
+    // This buffer is the size of 768, which is enough to evict L1 1.5 times. 
+    uint64_t *l2_eviction_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
 
     if (NULL == l2_eviction_buffer) {
         perror("Unable to malloc");
         return EXIT_FAILURE;
     }
 
-    // This buffer is the size of 16384, which is enough to evict L2. 
-    uint64_t *l3_eviction_buffer = (uint64_t *)malloc(16384*8*sizeof(uint64_t));
+    // This buffer is the size of 24576, which is enough to evict L2 1.5 times. 
+    uint64_t *l3_eviction_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
 
     if (NULL == l3_eviction_buffer) {
         perror("Unable to malloc");
@@ -80,10 +80,6 @@ int main (int ac, char **av) {
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
         tmp = l2_eviction_buffer[0];
-        tmp = l2_eviction_buffer[100];
-        tmp = l2_eviction_buffer[200];
-        tmp = l2_eviction_buffer[300];
-        tmp = l2_eviction_buffer[400];
       
         // Step 3: measure the access latency
         l2_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
@@ -100,10 +96,6 @@ int main (int ac, char **av) {
 
         // Step 2: Evict the entire L1 and L2 caches so that the program is forced to access the target address from L3
         tmp = l3_eviction_buffer[0];
-        tmp = l3_eviction_buffer[1000];
-        tmp = l3_eviction_buffer[2000];
-        tmp = l3_eviction_buffer[3000];
-        tmp = l3_eviction_buffer[4000];
      
         // Step 2: measure the access latency
         l3_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
