@@ -47,6 +47,14 @@ int main (int ac, char **av) {
     // ======
     //
 
+     for (int i=0; i<SAMPLES; i++){
+        // Step 1: bring the target cache line into DRAM by flushing it from the cache
+        clflush(target_buffer);
+
+        // Step 2: measure the access latency
+        dram_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
+    }
+
     // ======
     // [1.2] TODO: Measure L2 Latency, store results in l2_latency array
     // ======
