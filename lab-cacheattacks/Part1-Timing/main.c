@@ -31,10 +31,18 @@ int main (int ac, char **av) {
 
     // [1.2] TODO: Uncomment the following line to allocate a buffer of a size
     // of your chosing. This will help you measure the latencies at L2 and L3.
-    uint64_t *eviction_buffer = (uint64_t *)malloc(512*8*sizeof(uint64_t));
-    //512 16374
+    // This buffer is the size of 512, which is enough to evict L1. 
+    uint64_t *l2_eviction_buffer = (uint64_t *)malloc(512*8*sizeof(uint64_t));
 
-    if (NULL == eviction_buffer) {
+    if (NULL == l2_eviction_buffer) {
+        perror("Unable to malloc");
+        return EXIT_FAILURE;
+    }
+
+    // This buffer is the size of 16384, which is enough to evict L2. 
+    uint64_t *l3_eviction_buffer = (uint64_t *)malloc(16384*8*sizeof(uint64_t));
+
+    if (NULL == l3_eviction_buffer) {
         perror("Unable to malloc");
         return EXIT_FAILURE;
     }
@@ -71,14 +79,13 @@ int main (int ac, char **av) {
         tmp = target_buffer[0];
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
-        tmp = eviction_buffer[0];
-        tmp = eviction_buffer[100];
-        tmp = eviction_buffer[200];
-        tmp = eviction_buffer[300];
-        tmp = eviction_buffer[400];
-        tmp = eviction_buffer[500];
-
-        // Step 2: measure the access latency
+        tmp = l2_eviction_buffer[0];
+        tmp = l2_eviction_buffer[100];
+        tmp = l2_eviction_buffer[200];
+        tmp = l2_eviction_buffer[300];
+        tmp = l2_eviction_buffer[400];
+      
+        // Step 3: measure the access latency
         l2_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
     }
  
@@ -86,7 +93,21 @@ int main (int ac, char **av) {
     // [1.2] TODO: Measure L3 Latency, store results in l3_latency array
     // ======
     //
+ 
+    for (int i=0; i<SAMPLES; i++){
+        // Step 1: bring the target cache line into L2 by simply accessing the line
+        tmp = target_buffer[0];
 
+        // Step 2: Evict the entire L1 and L2 caches so that the program is forced to access the target address from L3
+        tmp = l3_eviction_buffer[0];
+        tmp = l3_eviction_buffer[1000];
+        tmp = l3_eviction_buffer[2000];
+        tmp = l3_eviction_buffer[3000];
+        tmp = l3_eviction_buffer[4000];
+     
+        // Step 2: measure the access latency
+        l3_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
+    }
 
     // Print the results to the screen
     // [1.5] Change print_results to print_results_for_python so that your code will work
@@ -96,7 +117,8 @@ int main (int ac, char **av) {
     free(target_buffer);
 
     // [1.2] TODO: Uncomment this line once you uncomment the eviction_buffer creation line
-    free(eviction_buffer);
+    free(l2_eviction_buffer);
+    free(l3_eviction_buffer);
     return 0;
 }
 
