@@ -66,7 +66,7 @@ int main (int ac, char **av) {
         tmp = target_buffer[0];
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
-        tmp_2 = eviction_buffer[0];
+        tmp = eviction_buffer[0];
 
         // Step 2: measure the access latency
         l2_latency[i] = measure_one_block_access_time((uint64_t)target_buffer);
@@ -86,7 +86,7 @@ int main (int ac, char **av) {
     free(target_buffer);
 
     // [1.2] TODO: Uncomment this line once you uncomment the eviction_buffer creation line
-    //free(eviction_buffer);
+    free(eviction_buffer);
     return 0;
 }
 
