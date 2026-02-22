@@ -79,12 +79,12 @@ int main (int ac, char **av) {
         tmp = target_buffer[0];
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
-        for (int j=0; j<614400; j++){
-           tmp = l3_eviction_buffer[j];
-           tmp = l3_eviction_buffer[j];
-                    tmp = l3_eviction_buffer[j];
+        for (int j=0; j<6144000; j++){
+           tmp = l2_eviction_buffer[j];
+           tmp = l2_eviction_buffer[j];
+                    tmp = l2_eviction_buffer[j];
 
-                    tmp = l3_eviction_buffer[j];
+                    tmp = l2_eviction_buffer[j];
 
         }
       
