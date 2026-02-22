@@ -40,7 +40,7 @@ int main (int ac, char **av) {
     }
 
     // This buffer is the size of 24576, which is enough to evict L2 1.5 times. 
-    uint64_t *l3_eviction_buffer = (uint64_t) *malloc(1.5*16384*8*sizeof(uint64_t));
+    uint64_t *l3_eviction_buffer = (uint64_t *) *malloc(1.5*16384*8*sizeof(uint64_t));
 
     if (NULL == l3_eviction_buffer) {
         perror("Unable to malloc");
