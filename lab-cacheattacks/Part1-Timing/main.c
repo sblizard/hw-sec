@@ -32,7 +32,7 @@ int main (int ac, char **av) {
     // [1.2] TODO: Uncomment the following line to allocate a buffer of a size
     // of your chosing. This will help you measure the latencies at L2 and L3.
     // This buffer is the size of 768, which is enough to evict L1 1.5 times. 
-    uint64_t *l2_eviction_buffer = (uint64_t)malloc(1.5*512*8*sizeof(uint64_t));
+    uint64_t *l2_eviction_buffer = (uint64_t *)malloc(10000*1.5*512*8*sizeof(uint64_t));
 
     if (NULL == l2_eviction_buffer) {
         perror("Unable to malloc");
@@ -40,7 +40,7 @@ int main (int ac, char **av) {
     }
 
     // This buffer is the size of 24576, which is enough to evict L2 1.5 times. 
-    uint64_t *l3_eviction_buffer = (uint64_t)malloc(1.5*16384*8*sizeof(uint64_t));
+    uint64_t *l3_eviction_buffer = (uint64_t) *malloc(1.5*16384*8*sizeof(uint64_t));
 
     if (NULL == l3_eviction_buffer) {
         perror("Unable to malloc");
@@ -79,7 +79,7 @@ int main (int ac, char **av) {
         tmp = target_buffer[0];
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
-        for (int j=0; j<6144; j++){
+        for (int j=0; j<614400; j++){
            tmp = l3_eviction_buffer[j];
            tmp = l3_eviction_buffer[j];
                     tmp = l3_eviction_buffer[j];
