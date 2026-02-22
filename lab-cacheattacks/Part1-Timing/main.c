@@ -80,12 +80,7 @@ int main (int ac, char **av) {
 
         // Step 2: Evict the entire L1 cache so that the program is forced to access the target address from L2
         for (int j=0; j<6144; j++){
-l2_eviction_buffer[j] = 0;
-         tmp = l2_eviction_buffer[j];
-                    tmp = l2_eviction_buffer[j];
-
-                    tmp = l2_eviction_buffer[j];
-
+           l2_eviction_buffer[j] = 0;
         }
       
         // Step 3: measure the access latency
@@ -103,7 +98,7 @@ l2_eviction_buffer[j] = 0;
 
         // Step 2: Evict the entire L1 and L2 caches so that the program is forced to access the target address from L3
         for (int j=0; j<6144*32; j++){
-l3_eviction_buffer[j] = 0;
+      l3_eviction_buffer[j] = 1;
          tmp = l3_eviction_buffer[j];
                     tmp = l3_eviction_buffer[j];
 
