@@ -40,6 +40,7 @@ int main(int argc, char **argv)
   while(true) {
     while (sending) {
       char text_buf[1];
+      printf("test");
       fgets(text_buf, sizeof(text_buf), stdin);
       sending = false;
       // TODO:
@@ -51,7 +52,7 @@ int main(int argc, char **argv)
         }
       }*/
       
-      printf("%s", text_buf);    
+      printf("test2%s", text_buf);    
     }
     sending = true;
   }
