@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   // page allocation, TLB insertion, etc.
   // Thus, we use a dummy write here to trigger page allocation
   // so later access will not suffer from such overhead.
-  //*((char *)buf) = 1; // dummy write to trigger page allocation
+  *((char *)buf) = 1; // dummy write to trigger page allocation
 
 
   // TODO:
@@ -31,11 +31,15 @@ int main(int argc, char **argv)
 
   bool sending = true;
   while (sending) {
-      char text_buf[128];
+      char text_buf[1];
       fgets(text_buf, sizeof(text_buf), stdin);
 
       // TODO:
       // Put your covert channel code here
+      measure_one_block_access_time(buf[0]);
+      *buf[0] = text_buf;  
+      measure_one_block_access_time(buf[0]);
+      
   }
 
   printf("Sender finished.\n");
