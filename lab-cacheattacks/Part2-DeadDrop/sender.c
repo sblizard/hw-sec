@@ -40,7 +40,6 @@ int main(int argc, char **argv)
   while(true) {
     while (sending) {
       char text_buf[1];
-      printf("test");
       fgets(text_buf, sizeof(text_buf), stdin);
       sending = false;
       // TODO:
