@@ -44,13 +44,13 @@ int main(int argc, char **argv)
       // TODO:
       // Put your covert channel code here
 
-      if((uint64_t)string_to_binary(text_buf) == 1) {
+      /*if((uint64_t)string_to_binary(text_buf) == 1) {
         for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }
-      }
+      }*/
       
-      printf("%d", measure_one_block_access_time(eviction_buffer[0]));    
+      printf("%c", text_buf);    
   }
 
   free(eviction_buffer);
