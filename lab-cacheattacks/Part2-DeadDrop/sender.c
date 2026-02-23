@@ -2,6 +2,7 @@
 #include"util.h"
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
+#include <signal.h>
 
 // TODO: define your own buffer size
 //#define BUFF_SIZE (1<<21)
@@ -42,6 +43,7 @@ int main(int argc, char **argv)
       char text_buf[128];
       fgets(text_buf, sizeof(text_buf), stdin);
       sending = false;
+      signal(SIGINT, handle_signal);
       // TODO:
       // Put your covert channel code here
       if((uint64_t)string_to_int(text_buf) == 1) {
@@ -60,4 +62,11 @@ int main(int argc, char **argv)
   return 0;
 }
 
+void handle_signal(int signal_num) {
+  printf("Received signal: %d\n", signal_num);
+  loop();
+}
 
+void loop() {
+  loop();
+}
