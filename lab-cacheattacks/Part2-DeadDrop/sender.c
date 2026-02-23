@@ -50,7 +50,7 @@ int main(int argc, char **argv)
         }
       }*/
       
-      printf("%c", text_buf);    
+      printf("%s", text_buf);    
   }
 
   free(eviction_buffer);
