@@ -50,7 +50,7 @@ int main(int argc, char **argv)
         }
       }
 
-      printf("%n", measure_one_block_access_time(eviction_buffer[6143]));
+      printf("%d", measure_one_block_access_time(eviction_buffer[6143]));
     }
     sending = true;
   }
