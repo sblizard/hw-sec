@@ -39,12 +39,11 @@ int main(int argc, char **argv)
   bool sending = true;
   while(true) {
     while (sending) {
-      char text_buf[1];
+      char text_buf[128];
       fgets(text_buf, sizeof(text_buf), stdin);
       sending = false;
       // TODO:
       // Put your covert channel code here
-      sleep(2);
       /*if((uint64_t)string_to_binary(text_buf) == 1) {
         for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
