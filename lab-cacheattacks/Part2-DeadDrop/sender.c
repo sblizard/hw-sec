@@ -49,8 +49,8 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }
       }
-    
-      sending = false;
+      
+      printf("%n", measure_one_block_access_time(eviction_buffer[0]));    
   }
 
   free(eviction_buffer);
