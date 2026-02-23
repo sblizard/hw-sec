@@ -1,0 +1,2 @@
+L2/L3 threshold: 125
+L3/DRAM threshold: 225
