@@ -44,7 +44,7 @@ int main(int argc, char **argv)
       // TODO:
       // Put your covert channel code here
 
-      if(text_buf == 1) {
+      if(string_to_binary(text_buf) == 1) {
         for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }
@@ -53,6 +53,7 @@ int main(int argc, char **argv)
       sending = false;
   }
 
+  free(eviction_buffer);
   printf("Sender finished.\n");
   return 0;
 }
