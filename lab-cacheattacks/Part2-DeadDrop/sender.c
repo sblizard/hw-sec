@@ -62,11 +62,12 @@ int main(int argc, char **argv)
   return 0;
 }
 
+void loop() {
+  loop();
+}
+
 void handle_signal(int signal_num) {
   printf("Received signal: %d\n", signal_num);
   loop();
 }
 
-void loop() {
-  loop();
-}
