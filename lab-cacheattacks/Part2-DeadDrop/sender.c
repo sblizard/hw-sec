@@ -8,6 +8,15 @@
 //#define BUFF_SIZE (1<<21)
 //#define BUFF_SIZE [TODO]
 
+void loop() {
+  loop();
+}
+
+void handle_signal(int signal_num) {
+  printf("Received signal: %d\n", signal_num);
+  loop();
+}
+
 int main(int argc, char **argv)
 {
   // Allocate a buffer using huge page
@@ -62,12 +71,4 @@ int main(int argc, char **argv)
   return 0;
 }
 
-void loop() {
-  loop();
-}
-
-void handle_signal(int signal_num) {
-  printf("Received signal: %d\n", signal_num);
-  loop();
-}
 
