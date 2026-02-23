@@ -36,9 +36,9 @@ int main(int argc, char **argv)
 
       // TODO:
       // Put your covert channel code here
-      measure_one_block_access_time(buf[0]);
+      measure_one_block_access_time(&buf[0]);
       *buf[0] = text_buf;  
-      measure_one_block_access_time(buf[0]);
+      measure_one_block_access_time(&buf[0]);
       sending = false;
   }
 
