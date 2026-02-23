@@ -47,7 +47,7 @@ int main(int argc, char **argv)
       printf("%ld\n", (uint64_t)string_to_binary(text_buf));
       printf("%ld\n", (uint64_t)binary_to_string(text_buf));
       printf("%ld\n", (uint64_t)string_to_int(text_buf));
-      if((uint64_t)string_to_binary(text_buf) == 1) {
+      if((uint64_t)string_to_int(text_buf) == 1) {
         printf("input was 1");
         for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
