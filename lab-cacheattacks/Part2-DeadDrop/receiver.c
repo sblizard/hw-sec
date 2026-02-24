@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
+		int count = 0;
 		for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
 			tmp = u_buffer[0];
@@ -69,12 +70,10 @@ int main(int argc, char **argv)
 			int sum = time + uime + vime + wime + xime;
 
 			if((sum > 615 && sum < 1000) || (sum > 1500)) {
-				printf("%d\n", 1);
-			}
-			else {
-				printf("%d\n", 0);
+				count++
 			}
 		}
+		printf("%d\n", count);
 		listening = false;
 
 	}
