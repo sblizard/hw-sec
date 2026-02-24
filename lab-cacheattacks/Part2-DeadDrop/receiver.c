@@ -48,13 +48,14 @@ int main(int argc, char **argv)
 			//tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-			if(string_to_binary(text_buf) == 0b1) {
+			if(string_to_int(text_buf) == 0b10) {
 				printf("Test\n");
 				for (int j=0; j<196608; j+=4){
            			test_buffer[j] = 1;
         		}
 			}
 			if(string_to_int(text_buf) == 2) {
+				printf("Test2\n");
 				for (int j=1; j<196608; j+=4){
            			test_buffer[j] = 1;
         		}
