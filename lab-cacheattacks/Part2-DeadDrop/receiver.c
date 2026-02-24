@@ -40,7 +40,8 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }*/
 		int count = 0;
-		for(int i = 0; i < 100; i++) {
+		for(int k = 0; k < 8; k++) {
+			for(int i = 0; i < 1; i++) {
 			tmp = t_buffer[0];
 			//tmp = u_buffer[0];
 			//tmp = v_buffer[0];
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
 			//tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-			if(string_to_int(text_buf) == 0b10) {
+			if((string_to_int(text_buf) >> k) & 0b00000001 == 0b1) {
 				printf("Test\n");
 				for (int j=0; j<196608; j+=4){
            			test_buffer[j] = 1;
@@ -84,6 +85,8 @@ int main(int argc, char **argv)
 				count++;
 			}
 		}
+		}
+		
 		printf("%d\n", count);
 		listening = false;
 
