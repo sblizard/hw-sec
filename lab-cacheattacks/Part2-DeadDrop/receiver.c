@@ -21,11 +21,9 @@ int main(int argc, char **argv)
 	fgets(text_buf, sizeof(text_buf), stdin);
 
 	printf("Receiver now listening.\n");
-	printf("test\n");
+
 	bool listening = true;
-	printf("%b\n", listening);
-	printf("before loop\n");
-		fflush(stdout);
+
 	while (listening) {
 		printf("test1\n");
 		fflush(stdout);
@@ -41,7 +39,7 @@ int main(int argc, char **argv)
 		for (int j=0; j<6144; j++) {
 			time += measure_one_block_access_time(eviction_buffer[j]);
 		}
-		printf("%ld\n", time);
+		printf("%d\n", time);
 		fflush(stdout);
 		listening = false;
 
