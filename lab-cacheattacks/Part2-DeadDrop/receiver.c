@@ -23,6 +23,9 @@ int main(int argc, char **argv)
 	printf("Receiver now listening.\n");
 
 	bool listening = true;
+	printf("%b\n", listening);
+	printf("before loop);
+		fflush(stdout);
 	while (listening) {
 		printf("test1\n");
 		fflush(stdout);
