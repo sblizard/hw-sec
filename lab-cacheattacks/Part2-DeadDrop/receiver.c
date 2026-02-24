@@ -9,8 +9,13 @@ int main(int argc, char **argv)
 
 	//create a buffer
 	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
-  		uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
-	  		uint64_t *t_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
+	uint64_t *t_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	uint64_t *u_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	uint64_t *v_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	uint64_t *w_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	uint64_t *x_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+
 
   	if (NULL == eviction_buffer) {
       perror("Unable to malloc");
@@ -35,8 +40,12 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }*/
 		int sum = 0;
-		for(int i = 0; i < 10; i++) {
+		//for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
+			tmp = u_buffer[0];
+			tmp = v_buffer[0];
+			tmp = w_buffer[0];
+			tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
 
@@ -46,12 +55,21 @@ int main(int argc, char **argv)
 
 			//time access to eviction buffer
 			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
+			CYCLES uime = measure_one_block_access_time((uint64_t)u_buffer);
+			CYCLES vime = measure_one_block_access_time((uint64_t)v_buffer);
+			CYCLES wime = measure_one_block_access_time((uint64_t)w_buffer);
+			CYCLES xime = measure_one_block_access_time((uint64_t)x_buffer);
+
 			if(time > 300) {
 				sum += 1;
-				printf("%d\n", time);
 			}
 			printf("%d\n", time);
-		}
+			printf("%d\n", uime);
+			printf("%d\n", vime);
+			printf("%d\n", wime);
+			printf("%d\n", xime);
+
+		//}
 		printf("%d\n", sum);
 		listening = false;
 
