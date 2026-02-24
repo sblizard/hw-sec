@@ -35,6 +35,7 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }*/
 		tmp = t_buffer[0];
+		t_buffer[0] = 1;
 		//wait for signal
 
 		/*for (int j=0; j<6144; j++){
