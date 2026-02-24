@@ -28,7 +28,7 @@ int main(int argc, char **argv)
   int mem = shm_open("/state", O_RDWR | O_CREAT, 00700);
   ftruncate(mem, 1);
   void *m = mmap(NULL, 1, PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
-  &m = 1;
+  m[0] = 1;
   printf("%p\n", m);
   
   //if (buf == (void*) - 1) {
