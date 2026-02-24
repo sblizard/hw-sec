@@ -77,7 +77,13 @@ int main(int argc, char **argv)
 			}
 			}
 			if(count >= 50) {
-				result += pow(2, k);
+				int exponent = k+1;
+				int add = 1;
+				while(exponent > 1) {
+					add *= 2;
+					k--;
+				}
+				result += add;
 			}
 		}
 		
