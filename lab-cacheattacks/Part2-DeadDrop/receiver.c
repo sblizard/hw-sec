@@ -20,9 +20,6 @@ int main(int argc, char **argv)
 	
 	printf("Please press enter.\n");
 
-	char text_buf[128];
-	fgets(text_buf, sizeof(text_buf), stdin);
-
 	printf("Receiver now listening.\n");
 
 	bool listening = true;
@@ -31,6 +28,9 @@ int main(int argc, char **argv)
 		
 		// Put your covert channel code here
 		int result = 0;
+
+		char text_buf[128];
+		fgets(text_buf, sizeof(text_buf), stdin);
 
 		// Prime the L2 cache with the buffer
 		for(int k = 0; k < 8; k++) {
