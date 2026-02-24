@@ -25,22 +25,24 @@ int main(int argc, char **argv)
 	bool listening = true;
 
 	while (listening) {
-		printf("test1\n");
-		fflush(stdout);
 		// Put your covert channel code here
 		// Fill the L2 cache with the buffer
 		for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }
 		//wait for signal
+		uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
+
+		for (int j=0; j<6144; j++){
+           test_buffer[j] = 1;
+        }
 
 		//time access to eviction buffer
 		CYCLES time = 0;
 		for (int j=0; j<6144; j++) {
-			time += measure_one_block_access_time(eviction_buffer);
+			time += measure_one_block_access_time((uint64_t)eviction_buffer);
 		}
 		printf("%d\n", time / 6144);
-		fflush(stdout);
 		listening = false;
 
 	}
