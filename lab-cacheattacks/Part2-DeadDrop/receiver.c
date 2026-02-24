@@ -78,12 +78,12 @@ int main(int argc, char **argv)
 			//printf("%d\n", time+uime+vime+wime+xime);
 			//int sum = time + uime + vime + wime + xime;
 			printf("%d\n", time);
-
-			if((time > 130 && time < 250) || (time > 310)) {
+			count += time;
+			/*if((time > 130 && time < 250) || (time > 310)) {
 				count++;
-			}
+			}*/
 		}
-		printf("%d\n", count);
+		printf("%d\n", count/100);
 		listening = false;
 
 	}
