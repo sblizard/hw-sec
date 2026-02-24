@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 
 	//create a buffer
 	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
-	uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
+	uint64_t *test_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
 	uint64_t *t_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
 	//uint64_t *u_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
 	//uint64_t *v_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
