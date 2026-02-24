@@ -35,7 +35,7 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }*/
 		int sum = 0;
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
@@ -48,6 +48,7 @@ int main(int argc, char **argv)
 			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
 			if(time > 300) {
 				sum += 1;
+				printf("%d\n", time);
 			}
 		}
 		printf("%d\n", sum);
