@@ -34,22 +34,23 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
-		tmp = t_buffer[0];
-		//t_buffer[0] = 1;
-		//wait for signal
+		int sum = 0;
+		for(int i = 0; i < 100; i++) {
+			tmp = t_buffer[0];
+			//t_buffer[0] = 1;
+			//wait for signal
 
-		for (int j=0; j<6144; j++){
-           test_buffer[j] = 1;
-        }
+			for (int j=0; j<6144; j++){
+           		test_buffer[j] = 1;
+        	}
 
-		//time access to eviction buffer
-		CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
-		if(time > 300) {
-			printf("%d\n", 1);
+			//time access to eviction buffer
+			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
+			if(time > 300) {
+				sum += 1;
+			}
 		}
-		else {
-			printf("%d\n", 0);
-		}
+		printf("%d\n", sum);
 		listening = false;
 
 	}
