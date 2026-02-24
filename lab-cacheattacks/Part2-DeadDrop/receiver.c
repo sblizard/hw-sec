@@ -77,11 +77,11 @@ int main(int argc, char **argv)
 			}
 			}
 			if(count >= 50) {
-				result += math.pow(2, k);
+				result += pow(2, k);
 			}
 		}
 		
-		printf("%d\n", count);
+		//printf("%d\n", count);
 		printf("%d\n", result);
 		listening = false;
 
