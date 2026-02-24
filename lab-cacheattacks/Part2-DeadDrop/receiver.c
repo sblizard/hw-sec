@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	fgets(text_buf, sizeof(text_buf), stdin);
 
 	printf("Receiver now listening.\n");
-
+	printf("test\n");
 	bool listening = true;
 	printf("%b\n", listening);
 	printf("before loop);
