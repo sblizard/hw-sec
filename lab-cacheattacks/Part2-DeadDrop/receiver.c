@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
-		//for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
 			tmp = u_buffer[0];
 			tmp = v_buffer[0];
@@ -47,7 +47,6 @@ int main(int argc, char **argv)
 			tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-			printf("%s\n", text_buf);
 			if(string_to_int(text_buf) == 1) {
 				for (int j=0; j<6144; j++){
            			test_buffer[j] = 1;
@@ -69,14 +68,14 @@ int main(int argc, char **argv)
 			//printf("%d\n", time+uime+vime+wime+xime);
 			int sum = time + uime + vime + wime + xime;
 
-		//}
+			if((sum > 615 && sum < 1000) || (sum > 1500)) {
+				printf("%d\n", 1);
+			}
+			else {
+				printf("%d\n", 0);
+			}
+		}
 		listening = false;
-		if((sum > 615 && sum < 1000) || (sum > 1500)) {
-			printf("%d\n", 1);
-		}
-		else {
-			printf("%d\n", 0);
-		}
 
 	}
 
