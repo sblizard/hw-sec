@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		int result = 0;
 		for(int k = 0; k < 8; k++) {
 			int count = 0;
-			for(int i = 0; i < 100; i++) {
+			for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
 			//tmp = u_buffer[0];
 			//tmp = v_buffer[0];
