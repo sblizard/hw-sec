@@ -60,19 +60,22 @@ int main(int argc, char **argv)
 			CYCLES wime = measure_one_block_access_time((uint64_t)w_buffer);
 			CYCLES xime = measure_one_block_access_time((uint64_t)x_buffer);
 
-			if(time > 300) {
-				sum += 1;
-			}
 			printf("%d\n", time);
 			printf("%d\n", uime);
 			printf("%d\n", vime);
 			printf("%d\n", wime);
 			printf("%d\n", xime);
 			printf("%d\n", time+uime+vime+wime+xime);
+			int sum = time + uime + vime + wime + xime;
 
 		//}
-		printf("%d\n", sum);
 		listening = false;
+		if((sum > 615 && sum < 1000) || (sum > 1500)) {
+			printf("%d\n", 1);
+		}
+		else {
+			printf("%d\n", 0);
+		}
 
 	}
 
