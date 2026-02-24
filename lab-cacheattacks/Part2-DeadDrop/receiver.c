@@ -34,13 +34,13 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
-		//tmp = t_buffer[0];
+		tmp = t_buffer[0];
 		//t_buffer[0] = 1;
 		//wait for signal
 
-		/*for (int j=0; j<6144; j++){
+		for (int j=0; j<6144; j++){
            test_buffer[j] = 1;
-        }*/
+        }
 
 		//time access to eviction buffer
 		CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
