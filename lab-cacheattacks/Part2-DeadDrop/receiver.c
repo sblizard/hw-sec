@@ -24,13 +24,13 @@ int main(int argc, char **argv)
 
 	bool listening = true;
 	while (listening) {
-
+		printf("test1\n");
 		// Put your covert channel code here
 		// Fill the L2 cache with the buffer
 		for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }
-
+		printf("test2\n");
 		//wait for signal
 
 		//time access to eviction buffer
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
 		for (int j=0; j<6144; j++) {
 			time += measure_one_block_access_time(eviction_buffer[j]);
 		}
+				printf("test3\n");
 		printf("%ld", time);
 		listening = false;
 
