@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		//time access to eviction buffer
 		CYCLES time = 0;
 		for (int j=0; j<6144; j++) {
-			time += measure_one_block_access_time(eviction_buffer[j]);
+			time += measure_one_block_access_time(&eviction_buffer[j]);
 		}
 		printf("%d\n", time);
 		fflush(stdout);
