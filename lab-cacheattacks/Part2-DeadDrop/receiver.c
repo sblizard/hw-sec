@@ -40,7 +40,7 @@ int main(int argc, char **argv)
            eviction_buffer[j] = 1;
         }*/
 		int count = 0;
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 100; i++) {
 			tmp = t_buffer[0];
 			//tmp = u_buffer[0];
 			//tmp = v_buffer[0];
@@ -83,10 +83,10 @@ int main(int argc, char **argv)
 	free(eviction_buffer);
 	free(test_buffer);
 	free(t_buffer);
-	free(u_buffer);
-	free(v_buffer);
-	free(w_buffer);
-	free(x_buffer);
+	//free(u_buffer);
+	//free(v_buffer);
+	//free(w_buffer);
+	//free(x_buffer);
 	return 0;
 }
 
