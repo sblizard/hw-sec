@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 			printf("%d\n", vime);
 			printf("%d\n", wime);
 			printf("%d\n", xime);
+			printf("%d\n", time+uime+vime+wime+xime);
 
 		//}
 		printf("%d\n", sum);
