@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 			tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-			printf("%d\n", text_buf);
+			printf("%s\n", text_buf);
 			if(string_to_int(text_buf) == 1) {
 				for (int j=0; j<6144; j++){
            			test_buffer[j] = 1;
