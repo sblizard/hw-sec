@@ -2,6 +2,7 @@
 #include"util.h"
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
+#include <math.h>
 
 int main(int argc, char **argv)
 {
@@ -39,9 +40,10 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
-		int count = 0;
+		int result = 0;
 		for(int k = 0; k < 8; k++) {
-			for(int i = 0; i < 1; i++) {
+			int count = 0;
+			for(int i = 0; i < 100; i++) {
 			tmp = t_buffer[0];
 			//tmp = u_buffer[0];
 			//tmp = v_buffer[0];
@@ -52,17 +54,6 @@ int main(int argc, char **argv)
 			if((string_to_int(text_buf) >> k) & 0b00000001 == 0b1) {
 				printf("Test\n");
 				for (int j=0; j<196608; j+=4){
-           			test_buffer[j] = 1;
-        		}
-			}
-			if(string_to_int(text_buf) == 2) {
-				printf("Test2\n");
-				for (int j=1; j<196608; j+=4){
-           			test_buffer[j] = 1;
-        		}
-			}			
-			if(string_to_int(text_buf) == 3) {
-				for (int j=2; j<196608; j+=4){
            			test_buffer[j] = 1;
         		}
 			}
@@ -84,10 +75,14 @@ int main(int argc, char **argv)
 			if((time > 130 && time < 250) || (time > 310)) {
 				count++;
 			}
-		}
+			}
+			if(count >= 50) {
+				result += math.pow(2, k);
+			}
 		}
 		
 		printf("%d\n", count);
+		printf("%d\n", result);
 		listening = false;
 
 	}
