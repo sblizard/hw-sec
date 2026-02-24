@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   ftruncate(mem, 1);
   void *m = mmap(NULL, 1, PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
   &m = 1;
-  printf("%d\n", m);
+  printf("%p\n", m);
   
   //if (buf == (void*) - 1) {
     // perror("mmap() error\n");
