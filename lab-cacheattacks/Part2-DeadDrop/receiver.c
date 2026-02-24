@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 			int sum = time + uime + vime + wime + xime;
 
 			if((sum > 615 && sum < 1000) || (sum > 1500)) {
-				count++
+				count++;
 			}
 		}
 		printf("%d\n", count);
