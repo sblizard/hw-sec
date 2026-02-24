@@ -14,6 +14,7 @@ void loop() {
   loop();
 }
 
+
 void handle_signal(int signal_num) {
   printf("Received signal: %d\n", signal_num);
   loop();
