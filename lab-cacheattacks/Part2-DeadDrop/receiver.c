@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 			//printf("%d\n", xime);
 			//printf("%d\n", time+uime+vime+wime+xime);
 			int sum = time + uime + vime + wime + xime;
+			printf("%d\n", sum);
 
 			if((sum > 615 && sum < 1000) || (sum > 1500)) {
 				count++;
