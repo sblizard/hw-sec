@@ -18,7 +18,7 @@ void handle_signal(int signal_num) {
   loop();
 }
 
-shm_open(const char *state, int O_RDWR | O_CREAT, 00700);
+shm_open(const char *state, O_RDWR | O_CREAT, 00700);
 
 int main(int argc, char **argv)
 {
