@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 	// Put your covert channel setup code here
 
 	//create a buffer
-	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
+	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
 	uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
 	uint64_t *t_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
 	//uint64_t *u_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 			//t_buffer[0] = 1;
 			//wait for signal
 			if(string_to_int(text_buf) == 1) {
-				for (int j=0; j<6144; j++){
+				for (int j=0; j<196608; j++){
            			test_buffer[j] = 1;
         		}
 			}
