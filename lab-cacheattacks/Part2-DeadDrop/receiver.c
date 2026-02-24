@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 			//int sum = time + uime + vime + wime + xime;
 			printf("%d\n", time);
 
-			if((time > 130 && time < 250) || (time > 300)) {
+			if((time > 130 && time < 250) || (time > 310)) {
 				count++;
 			}
 		}
