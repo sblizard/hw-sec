@@ -3,18 +3,19 @@
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
 
-// TODO: define your own buffer size
-#define CACHE_LINE       64
-#define L2_SETS          1024
-#define L2_WAYS          16
-#define NUM_SECTIONS     8
-#define SETS_PER_SECT    (L2_SETS / NUM_SECTIONS)    
-#define LINES_PER_SECT   (SETS_PER_SECT * L2_WAYS)    
-#define BYTES_PER_SECT   (LINES_PER_SECT * CACHE_LINE)
+#define CACHE_LINE 64
+#define L2_SETS 1024
+#define L2_WAYS 16
+#define NUM_SECTIONS 8
+#define SETS_PER_SECT (L2_SETS / NUM_SECTIONS)    
+#define LINES_PER_SECT (SETS_PER_SECT * L2_WAYS)    
+#define BYTES_PER_SECT (LINES_PER_SECT * CACHE_LINE)
 
-#define EVICT_OFFSET     L2_SIZE  
+#define EVICT_OFFSET L2_SIZE  
 
-#define BUFF_SIZE        (1 << 21) 
+#define BUFF_SIZE (1 << 21) 
+
+#define MISS_THRESHOLD 27
 
 public void prime_section(volatile char *buf, int section) 
 {
@@ -50,7 +51,6 @@ uint64_t probe_section(volatile char *buf, int section)
 	return total / LINES_PER_SECT;
 }
 
-
 int main(int argc, char **argv)
 {
   // Allocate a buffer using huge page
@@ -65,12 +65,14 @@ int main(int argc, char **argv)
   // page allocation, TLB insertion, etc.
   // Thus, we use a dummy write here to trigger page allocation
   // so later access will not suffer from such overhead.
-  //*((char *)buf) = 1; // dummy write to trigger page allocation
+  *((char *)buf) = 1; // dummy write to trigger page allocation
 
 
   // TODO:
   // Put your covert channel setup code here
-  uint64_t *buffer = (uint64_t *)malloc(BUFF_SIZE);
+  for (size_t i = 0; i < BUFF_SIZE; i += 4096) {
+        ((volatile char *)buf)[i] = 1;
+  }
   printf("Please type a message.\n");
 
   bool sending = true;
@@ -80,6 +82,26 @@ int main(int argc, char **argv)
 
       // TODO:
       // Put your covert channel code here
+      int val = atoi(text_buf);
+      if (val < 0 || val > 255) {
+      	printf("Please enter 0-255.\n");
+        continue;
+      }
+      
+      for (int i = 0; i < NUM_REPEATS; i++) {
+        for (int bit = 0; bit < 8; bit++) {
+          if ((value >> bit) & 1) {
+            evict_section(buf, bit);
+          }
+	}
+     
+        uint64_t start = rdtsc_begin();
+        while (rdtsc_begin() - start < SEND_WINDOW_CYCLES) {
+          asm volatile("pause");
+        }
+
+       printf("Please type a message.\n");
+      }
   }
 
   printf("Sender finished.\n");
