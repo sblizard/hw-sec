@@ -49,11 +49,20 @@ int main(int argc, char **argv)
 			//t_buffer[0] = 1;
 			//wait for signal
 			if(string_to_int(text_buf) == 1) {
-				for (int j=0; j<196608; j++){
+				for (int j=0; j<196608; j+=4){
            			test_buffer[j] = 1;
         		}
 			}
-		
+			if(string_to_int(text_buf) == 2) {
+				for (int j=1; j<196608; j+=4){
+           			test_buffer[j] = 1;
+        		}
+			}			
+			if(string_to_int(text_buf) == 3) {
+				for (int j=2; j<196608; j+=4){
+           			test_buffer[j] = 1;
+        		}
+			}
 			//time access to eviction buffer
 			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
 			//CYCLES uime = measure_one_block_access_time((uint64_t)u_buffer);
