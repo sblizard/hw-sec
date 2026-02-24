@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	printf("test\n");
 	bool listening = true;
 	printf("%b\n", listening);
-	printf("before loop);
+	printf("before loop\n");
 		fflush(stdout);
 	while (listening) {
 		printf("test1\n");
