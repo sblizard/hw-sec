@@ -48,7 +48,8 @@ int main(int argc, char **argv)
 	}
 
 	printf("Receiver finished.\n");
-
+	free(eviction_buffer);
+	free(test_buffer);
 	return 0;
 }
 
