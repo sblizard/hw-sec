@@ -50,6 +50,7 @@ uint64_t probe_section(volatile char *buf, int section)
 	return total / LINES_PER_SECT;
 }
 
+
 int main(int argc, char **argv)
 {
   // Allocate a buffer using huge page
