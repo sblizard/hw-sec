@@ -4,6 +4,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 // TODO: define your own buffer size
 //#define BUFF_SIZE (1<<21)
