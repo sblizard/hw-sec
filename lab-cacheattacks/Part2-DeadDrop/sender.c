@@ -3,6 +3,7 @@
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
 #include <signal.h>
+#include <semaphore.h>
 
 // TODO: define your own buffer size
 //#define BUFF_SIZE (1<<21)
@@ -16,6 +17,8 @@ void handle_signal(int signal_num) {
   printf("Received signal: %d\n", signal_num);
   loop();
 }
+
+shm_open(const char *state, int O_RDWR | O_CREAT, 00700);
 
 int main(int argc, char **argv)
 {
