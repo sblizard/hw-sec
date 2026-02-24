@@ -18,7 +18,8 @@ void handle_signal(int signal_num) {
   loop();
 }
 
-shm_open("/state", O_RDWR | O_CREAT, 00700);
+int mem;
+mem = shm_open("/state", O_RDWR | O_CREAT, 0666);
 
 int main(int argc, char **argv)
 {
