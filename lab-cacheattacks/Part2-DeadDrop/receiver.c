@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 		/*for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }*/
-		int sum = 0;
 		//for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
 			tmp = u_buffer[0];
