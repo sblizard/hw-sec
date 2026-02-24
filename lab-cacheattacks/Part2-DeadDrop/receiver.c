@@ -2,15 +2,15 @@
 #include"util.h"
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
-#include <semaphore.h>
-
-sem_t sem;
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 int main(int argc, char **argv)
 {
 	// Put your covert channel setup code here
 	int mem = shm_open("/state", O_RDWR, 00700);
-	//ftruncate(mem, sizeof(int));
+	ftruncate(mem, sizeof(int));
 	int *m = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
 	printf("%d\n", *m);
 	
