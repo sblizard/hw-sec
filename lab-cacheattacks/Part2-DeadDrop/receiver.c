@@ -63,6 +63,7 @@ int main(int argc, char **argv)
 				}
 				result += add;
 			}
+			listening = false;
 		}
 		
 		printf("%d\n", result);
