@@ -11,10 +11,10 @@ int main(int argc, char **argv)
 	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
 	uint64_t *test_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
 	uint64_t *t_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
-	uint64_t *u_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
-	uint64_t *v_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
-	uint64_t *w_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
-	uint64_t *x_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	//uint64_t *u_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	//uint64_t *v_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	//uint64_t *w_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
+	//uint64_t *x_buffer = (uint64_t *)malloc(8*sizeof(uint64_t));
 
 
   	if (NULL == eviction_buffer) {
@@ -42,10 +42,10 @@ int main(int argc, char **argv)
 		int count = 0;
 		for(int i = 0; i < 10; i++) {
 			tmp = t_buffer[0];
-			tmp = u_buffer[0];
-			tmp = v_buffer[0];
-			tmp = w_buffer[0];
-			tmp = x_buffer[0];
+			//tmp = u_buffer[0];
+			//tmp = v_buffer[0];
+			//tmp = w_buffer[0];
+			//tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
 			if(string_to_int(text_buf) == 1) {
@@ -56,10 +56,10 @@ int main(int argc, char **argv)
 		
 			//time access to eviction buffer
 			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
-			CYCLES uime = measure_one_block_access_time((uint64_t)u_buffer);
-			CYCLES vime = measure_one_block_access_time((uint64_t)v_buffer);
-			CYCLES wime = measure_one_block_access_time((uint64_t)w_buffer);
-			CYCLES xime = measure_one_block_access_time((uint64_t)x_buffer);
+			//CYCLES uime = measure_one_block_access_time((uint64_t)u_buffer);
+			//CYCLES vime = measure_one_block_access_time((uint64_t)v_buffer);
+			//CYCLES wime = measure_one_block_access_time((uint64_t)w_buffer);
+			//CYCLES xime = measure_one_block_access_time((uint64_t)x_buffer);
 
 			//printf("%d\n", time);
 			//printf("%d\n", uime);
@@ -67,10 +67,10 @@ int main(int argc, char **argv)
 			//printf("%d\n", wime);
 			//printf("%d\n", xime);
 			//printf("%d\n", time+uime+vime+wime+xime);
-			int sum = time + uime + vime + wime + xime;
-			printf("%d\n", sum);
+			//int sum = time + uime + vime + wime + xime;
+			printf("%d\n", time);
 
-			if((sum > 615 && sum < 1000) || (sum > 1500)) {
+			if((time > 615 && time < 1000) || (time > 1500)) {
 				count++;
 			}
 		}
