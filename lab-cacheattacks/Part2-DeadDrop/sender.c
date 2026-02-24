@@ -26,10 +26,11 @@ int main(int argc, char **argv)
   // See the handout for details about hugepage management
   //void *buf= mmap(NULL, BUFF_SIZE, PROT_READ | PROT_WRITE, MAP_POPULATE | MAP_ANONYMOUS | MAP_PRIVATE | MAP_HUGETLB, -1, 0);
   int mem = shm_open("/state", O_RDWR | O_CREAT, 00700);
-  ftruncate(mem, 1);
+  ftruncate(mem, sizeof(int));
   void *m = mmap(NULL, 1, PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
-  m[0] = 1;
-  printf("%p\n", m);
+  *m = 2;
+  
+  printf("%d\n", *m);
   
   //if (buf == (void*) - 1) {
     // perror("mmap() error\n");
