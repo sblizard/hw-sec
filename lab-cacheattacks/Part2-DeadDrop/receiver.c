@@ -31,7 +31,6 @@ int main(int argc, char **argv)
 		for (int j=0; j<6144; j++){
            eviction_buffer[j] = 1;
         }
-		printf("test2\n");
 		//wait for signal
 
 		//time access to eviction buffer
@@ -39,8 +38,7 @@ int main(int argc, char **argv)
 		for (int j=0; j<6144; j++) {
 			time += measure_one_block_access_time(eviction_buffer[j]);
 		}
-				printf("test3\n");
-		printf("%ld", time);
+		printf("%ld\n", time);
 		fflush(stdout);
 		listening = false;
 
