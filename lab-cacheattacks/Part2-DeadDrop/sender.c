@@ -2,8 +2,8 @@
 #include"util.h"
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
-#include <signal.h>
-#include <semaphore.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 // TODO: define your own buffer size
 //#define BUFF_SIZE (1<<21)
