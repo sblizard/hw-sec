@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 				count++;
 			}
 			}
-			if(count >= 50) {
+			if(count >= 5) {
 				int exponent = k+1;
 				int add = 1;
 				while(exponent > 1) {
