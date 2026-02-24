@@ -50,6 +50,7 @@ int main(int argc, char **argv)
 				sum += 1;
 				printf("%d\n", time);
 			}
+			printf("%d\n", time);
 		}
 		printf("%d\n", sum);
 		listening = false;
