@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 	bool listening = true;
 	while (listening) {
 		printf("test1\n");
+		fflush(stdout);
 		// Put your covert channel code here
 		// Fill the L2 cache with the buffer
 		for (int j=0; j<6144; j++){
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
 		}
 				printf("test3\n");
 		printf("%ld", time);
+		fflush(stdout);
 		listening = false;
 
 	}
