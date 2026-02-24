@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 					count++;
 				}
 			}
+			//Determine whether the bit was 1 or 0 and add to the result accordingly
 			if(count >= 50) {
 				int exponent = k+1;
 				int add = 1;
@@ -64,9 +65,7 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		//printf("%d\n", count);
 		printf("%d\n", result);
-		listening = false;
 
 	}
 
