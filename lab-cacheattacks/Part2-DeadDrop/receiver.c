@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 				int add = 1;
 				while(exponent > 1) {
 					add *= 2;
-					k--;
+					exponent--;
 				}
 				result += add;
 			}
