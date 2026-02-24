@@ -44,7 +44,12 @@ int main(int argc, char **argv)
 
 		//time access to eviction buffer
 		CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
-		printf("%d\n", time);
+		if(time > 300) {
+			printf("%d\n", 1);
+		}
+		else {
+			printf("%d\n", 0);
+		}
 		listening = false;
 
 	}
