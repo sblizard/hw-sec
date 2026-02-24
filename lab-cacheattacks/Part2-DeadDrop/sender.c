@@ -18,14 +18,13 @@ void handle_signal(int signal_num) {
   loop();
 }
 
-int mem;
-mem = shm_open("/state", O_RDWR | O_CREAT, 0666);
-
 int main(int argc, char **argv)
 {
   // Allocate a buffer using huge page
   // See the handout for details about hugepage management
   //void *buf= mmap(NULL, BUFF_SIZE, PROT_READ | PROT_WRITE, MAP_POPULATE | MAP_ANONYMOUS | MAP_PRIVATE | MAP_HUGETLB, -1, 0);
+  int mem = shm_open("/state", O_RDWR | O_CREAT, 00700);
+
   
   //if (buf == (void*) - 1) {
     // perror("mmap() error\n");
