@@ -48,7 +48,8 @@ int main(int argc, char **argv)
 			//tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-			if(string_to_int(text_buf) == 1) {
+			if(string_to_int(text_buf) == 0b1) {
+				printf("Test\n");
 				for (int j=0; j<196608; j+=4){
            			test_buffer[j] = 1;
         		}
@@ -78,12 +79,11 @@ int main(int argc, char **argv)
 			//printf("%d\n", time+uime+vime+wime+xime);
 			//int sum = time + uime + vime + wime + xime;
 			printf("%d\n", time);
-			count += time;
-			/*if((time > 130 && time < 250) || (time > 310)) {
+			if((time > 130 && time < 250) || (time > 310)) {
 				count++;
-			}*/
+			}
 		}
-		printf("%d\n", count/100);
+		printf("%d\n", count);
 		listening = false;
 
 	}
