@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	
 	printf("Please press enter.\n");
 
-	char text_buf[2];
+	char text_buf[128];
 	fgets(text_buf, sizeof(text_buf), stdin);
 
 	printf("Receiver now listening.\n");
@@ -47,11 +47,13 @@ int main(int argc, char **argv)
 			tmp = x_buffer[0];
 			//t_buffer[0] = 1;
 			//wait for signal
-
-			/*for (int j=0; j<6144; j++){
-           		test_buffer[j] = 1;
-        	}*/
-
+			printf("%d\n", text_buf);
+			if(text_buf == 1) {
+				for (int j=0; j<6144; j++){
+           			test_buffer[j] = 1;
+        		}
+			}
+		
 			//time access to eviction buffer
 			CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
 			CYCLES uime = measure_one_block_access_time((uint64_t)u_buffer);
@@ -59,12 +61,12 @@ int main(int argc, char **argv)
 			CYCLES wime = measure_one_block_access_time((uint64_t)w_buffer);
 			CYCLES xime = measure_one_block_access_time((uint64_t)x_buffer);
 
-			printf("%d\n", time);
-			printf("%d\n", uime);
-			printf("%d\n", vime);
-			printf("%d\n", wime);
-			printf("%d\n", xime);
-			printf("%d\n", time+uime+vime+wime+xime);
+			//printf("%d\n", time);
+			//printf("%d\n", uime);
+			//printf("%d\n", vime);
+			//printf("%d\n", wime);
+			//printf("%d\n", xime);
+			//printf("%d\n", time+uime+vime+wime+xime);
 			int sum = time + uime + vime + wime + xime;
 
 		//}
@@ -81,6 +83,11 @@ int main(int argc, char **argv)
 	printf("Receiver finished.\n");
 	free(eviction_buffer);
 	free(test_buffer);
+	free(t_buffer);
+	free(u_buffer);
+	free(v_buffer);
+	free(w_buffer);
+	free(x_buffer);
 	return 0;
 }
 
