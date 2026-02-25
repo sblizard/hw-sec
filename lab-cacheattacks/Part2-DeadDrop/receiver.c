@@ -87,9 +87,3 @@ int main(int argc, char **argv)
 void handle_signal(int signal_num) {
     printf("Received signal in receiver: %d\n", signal_num);
 }
-
-1. Prime L2 cache r
-2. transmit first bit s
-3. decode first bit r
-4. prime L2 cache r
-5. transmit second bit s
