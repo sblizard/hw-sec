@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   // TODO:
   // Put your covert channel setup code here
 
-  uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*512*8*sizeof(uint64_t));
+  uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
   
   if (NULL == eviction_buffer) {
       perror("Unable to malloc");
