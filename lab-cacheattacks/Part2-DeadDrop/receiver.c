@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	
 	printf("Please press enter.\n");
 
-	char text_buf[128];
+	char text_buf[2];
 	fgets(text_buf, sizeof(text_buf), stdin);
 	
 	printf("Receiver now listening.\n");
@@ -44,15 +44,15 @@ int main(int argc, char **argv)
 			int count = 0;
 			for(int i = 0; i < 100; i++) {
 				tmp = t_buffer[0];
-	
+				*m = 0;
 			//wait for signal
-
+				while(*m == 0) {}
 			//Determine bits sequentially by evicting the L2 cache on 1's
-				if((string_to_int(text_buf) >> k) & 0b00000001 == 0b1) {
-					for (int j=0; j<196608; j+=4){
+				/*if((string_to_int(text_buf) >> k) & 0b00000001 == 0b1) {
+					for (int j=0; j<196608; j++){
            				eviction_buffer[j] = 1;
         			}
-				}
+				}*/
 			//time access to eviction buffer
 				CYCLES time = measure_one_block_access_time((uint64_t)t_buffer);
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 				}
 				result += add;
 			}
-			listening = false;
+			//listening = false;
 		}
 		
 		printf("%d\n", result);
@@ -88,4 +88,8 @@ void handle_signal(int signal_num) {
     printf("Received signal in receiver: %d\n", signal_num);
 }
 
-
+1. Prime L2 cache r
+2. transmit first bit s
+3. decode first bit r
+4. prime L2 cache r
+5. transmit second bit s
