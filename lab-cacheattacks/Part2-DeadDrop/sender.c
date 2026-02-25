@@ -28,7 +28,7 @@ int main(int argc, char **argv)
   int mem = shm_open("/state", O_RDWR | O_CREAT, 00700);
   ftruncate(mem, sizeof(int));
   int *m = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
-  *m = 2;
+  *m = 1;
   
   printf("%d\n", *m);
   
@@ -61,12 +61,17 @@ int main(int argc, char **argv)
       char text_buf[128];
       fgets(text_buf, sizeof(text_buf), stdin);
       sending = false;
-      //signal(SIGINT, handle_signal);
       // TODO:
       // Put your covert channel code here
-      if((uint64_t)string_to_int(text_buf) == 1) {
-        for (int j=0; j<6144; j++){
-           eviction_buffer[j] = 1;
+      for(int k = 0; k < 8; k++) {
+        for(int i = 0; i < 100; i++) {
+          while(*m == 1) {}
+          if((string_to_int(text_buf) >> k) & 0b00000001 == 1) {
+            for (int j=0; j<196608; j++){
+               eviction_buffer[j] = 1;
+            }
+          }
+          *m = 1;
         }
       }
 
