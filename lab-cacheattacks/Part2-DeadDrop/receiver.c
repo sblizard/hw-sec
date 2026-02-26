@@ -12,7 +12,6 @@ int main(int argc, char **argv)
 	int mem = shm_open("/state", O_RDWR, 00700);
 	ftruncate(mem, sizeof(int));
 	int *m = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
-	printf("%d\n", *m);
 	
 	//create a buffer
 	uint64_t *eviction_buffer = (uint64_t *)malloc(1.5*16384*8*sizeof(uint64_t));
