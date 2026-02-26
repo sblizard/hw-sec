@@ -30,7 +30,6 @@ int main(int argc, char **argv)
   int *m = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, mem, 0);
   *m = 1;
   
-  printf("%d\n", *m);
   
   //if (buf == (void*) - 1) {
     // perror("mmap() error\n");
