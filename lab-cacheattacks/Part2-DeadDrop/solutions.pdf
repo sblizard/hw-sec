@@ -1,0 +1,10 @@
+Describe your communication protocol.
+
+Encode:
+To set up encoding, we split the L2 cache into eight sections from 0-7, each taking up 1/8th of the L2 cache sets. When a user enters a number 0-255, we represent the value in 8-digit binary. For each bit i, if i == 1, we evict section i by accessing a conflict address that maps to the same L2 cache set multiple times. If i == 0, we move onto the next section, keeping section i as it is. We repeat this eviction process persistently to keep the envoded value in the cache state.
+
+Receive:
+For each of the i = 0,...,7, the receiver primes the section by accessing 16 cache lines that map to it, loading it into the L2 cache. We then allow the sender to evict (do the encoding process described above) and probe each section by re-accessing the same 16 lines and mesuring the average access time in CPU cycles.
+
+Decode:
+If the average access time for a section i is more than 125 cycles, the lines were evicted by the sender during the encoding process and the bit i is decoded as a 1. If the average access time is less than 125, the lines are still in cache and bit i is decoded as 0. All eight bits together are decoded as the value sent by the user. To reduce noise, this process is continuously repeated and the most frequently seen value is printed in terminal. 
