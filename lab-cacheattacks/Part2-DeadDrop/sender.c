@@ -73,8 +73,6 @@ int main(int argc, char **argv)
           *m = 1;
         }
       }
-
-      printf("%d", measure_one_block_access_time((uint64_t)eviction_buffer));
     }
     sending = true;
   }
