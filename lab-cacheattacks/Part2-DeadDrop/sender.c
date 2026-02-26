@@ -23,8 +23,6 @@ int main(int argc, char **argv)
   *((char *)buf) = 1; // dummy write to trigger page allocation
 
 
-  // TODO:
-  // Put your covert channel setup code here
   for (size_t i = 0; i < BUFF_SIZE; i += 4096) {
         ((volatile char *)buf)[i] = 1;
   }
@@ -35,8 +33,6 @@ int main(int argc, char **argv)
       char text_buf[128];
       fgets(text_buf, sizeof(text_buf), stdin);
 
-      // TODO:
-      // Put your covert channel code here
       int val = atoi(text_buf);
       if (val < 0 || val > 255) {
       	printf("Please enter 0-255.\n");
@@ -52,7 +48,6 @@ int main(int argc, char **argv)
       }
   }
 
-  printf("Sender finished.\n");
   return 0;
 }
 
