@@ -10,12 +10,7 @@
 #define L2_SIZE          1048576
 #define NUM_SECTIONS     8
 #define SETS_PER_SECT    (L2_SETS / NUM_SECTIONS)
-#define LINES_PER_SECT   (SETS_PER_SECT * L2_WAYS)
-#define BYTES_PER_SECT   (LINES_PER_SECT * CACHE_LINE)
-#define EVICT_OFFSET     L2_SIZE
-//#define BUFF_SIZE        (1 << 21)
 #define MISS_THRESHOLD   125
-#define SEND_WINDOW_CYCLES 10000 
 #define PROBE_LINES 	 16 
 #define BUFF_SIZE (L2_SIZE * (L2_WAYS + 2)) 
 

@@ -6,7 +6,6 @@
 
 int main(int argc, char **argv)
 {
-	// Put your covert channel setup code here
 	void *buf = mmap(NULL, BUFF_SIZE, PROT_READ | PROT_WRITE, MAP_POPULATE | MAP_ANONYMOUS | MAP_PRIVATE | MAP_HUGETLB, -1, 0);
     	if (buf == (void *)-1) { 
 		perror("mmap() error"); 
