@@ -1,0 +1,3 @@
+L2: Less than 125.
+L3: Greater than 125, less than 230.
+DRAM: Greater than 230

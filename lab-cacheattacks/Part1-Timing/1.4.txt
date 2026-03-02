@@ -1,0 +1,1 @@
+How many cache lines do you need to access to fill up the entire L2 cache and L3 cache respectively? You need to access 16*1024 = 16384, 11 * 16834= 180224 cache lines respectively.
