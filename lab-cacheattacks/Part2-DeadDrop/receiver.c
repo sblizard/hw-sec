@@ -24,7 +24,6 @@ int main(int argc, char **argv)
 	printf("Receiver now listening.\n");
 	
 	int freq[256] = {0};
-	int samples = 0;
 	bool listening = true;
 	while (listening) {
 		for (int bit = 0; bit < 8; bit ++) {
@@ -42,8 +41,9 @@ int main(int argc, char **argv)
     		}
         	
 		fflush(stdout);
-		samples++;
-		freq[value]++;
+		if (value != 0) {
+			freq[value]++;
+		}
 		int mode = 0;
         	
 		for (int i = 1; i < 256; i++)
