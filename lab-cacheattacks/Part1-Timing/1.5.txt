@@ -1,4 +1,2 @@
-L1: [0,90]
-L2: (90, 110]
-L3: (110, 150]
-DRAM: (150, 300]
+L2/L3 threshold: 125
+L3/DRAM threshold: 225
