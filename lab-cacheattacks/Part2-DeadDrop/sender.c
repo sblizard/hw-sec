@@ -2,10 +2,7 @@
 #include"util.h"
 // mman library to be used for hugepage allocations (e.g. mmap or posix_memalign only)
 #include <sys/mman.h>
-
-// TODO: define your own buffer size
-#define BUFF_SIZE (1<<21)
-//#define BUFF_SIZE [TODO]
+#include"covert.h"
 
 int main(int argc, char **argv)
 {
@@ -17,16 +14,18 @@ int main(int argc, char **argv)
      perror("mmap() error\n");
      exit(EXIT_FAILURE);
   }
+
+  printf("buf: %p\n", buf);
   // The first access to a page triggers overhead associated with
   // page allocation, TLB insertion, etc.
   // Thus, we use a dummy write here to trigger page allocation
   // so later access will not suffer from such overhead.
-  //*((char *)buf) = 1; // dummy write to trigger page allocation
+  *((char *)buf) = 1; // dummy write to trigger page allocation
 
 
-  // TODO:
-  // Put your covert channel setup code here
-
+  for (size_t i = 0; i < BUFF_SIZE; i += 4096) {
+        ((volatile char *)buf)[i] = 1;
+  }
   printf("Please type a message.\n");
 
   bool sending = true;
@@ -34,11 +33,21 @@ int main(int argc, char **argv)
       char text_buf[128];
       fgets(text_buf, sizeof(text_buf), stdin);
 
-      // TODO:
-      // Put your covert channel code here
+      int val = atoi(text_buf);
+      if (val < 0 || val > 255) {
+      	printf("Please enter 0-255.\n");
+        continue;
+      }
+      
+      while(true){  
+      	for (int bit = 0; bit < 8; bit++) {
+          if ((val >> bit) & 1) {
+            evict_section(buf, bit);
+          }
+	}
+      }
   }
 
-  printf("Sender finished.\n");
   return 0;
 }
 
