@@ -71,7 +71,6 @@ int main(int argc, char const *argv[])
     uint64_t hit = calibrate_hit(buf);
     uint64_t miss = calibrate_miss(buf);
     uint64_t access = (hit + miss) / 2 + 10; // Small buffer for noise
-    printf("Calibrated: hit=%llu, miss=%llu, threshold=%d\n", hit, miss, access);
 
     while (1)
     {
@@ -99,7 +98,6 @@ int main(int argc, char const *argv[])
         }
         if (best_set > 0)
         {
-            printf("Flag: %d, freg[flag]: %d\n", 914, freq[914]);
             printf("Flag: %d, freq[flag]: %d\n", best_set, freq[best_set]);
         }
     }
