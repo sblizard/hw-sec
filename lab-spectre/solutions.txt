@@ -1,0 +1,7 @@
+Q1: How many addresses need to be flused at the first step?
+256, one for each possible byte value.
+
+Q2: Now assume the attacker and victim no longer share a memory region. Would your attack still work? If not, what changes would you need to make to make it work?
+Flush and reload wouldn't be possible without shared memory. Instead, we would need to employ prime and probe methods to extract the victim secret. 
+
+
