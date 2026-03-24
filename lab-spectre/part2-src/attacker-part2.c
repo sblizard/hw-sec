@@ -15,7 +15,7 @@
 #define PAGE_SIZE 4096
 #define NUM_SLOTS 256
 #define TRIALS 200
-#define TRAIN_PER_ATTACK 10
+#define TRAIN_PER_ATTACK 3 
 
 /*
  * call_kernel_part2
