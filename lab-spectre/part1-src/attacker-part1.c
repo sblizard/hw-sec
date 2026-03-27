@@ -40,7 +40,6 @@ static void flush_probe_array(char *shared_memory) {
     for (int i = 0; i < NUM_SLOTS; i++) {
         clflush(&shared_memory[i * PAGE_SIZE]);
     }
-    __asm__ volatile("mfence" ::: "memory");
 }
 
 
