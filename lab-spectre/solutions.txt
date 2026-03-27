@@ -1,0 +1,4 @@
+1. There are 256 possible values for a byte so 256 addresses will need to be flushed.
+2. This would no longer work because the attacker cannot access the same addresses as the victim, meaning the victim will not load a cache line that we would flush, so all reloads would thus be slow. Instead, a prime + probe attack must be implemented to find which cache set the victim accessed, which can leak information on the secret value. 
+3. Since the offset value can be set by the attacker, the attacker can access any address in the victim's address space via the cache covert channel. 
+4. Training only once gives about 83% accuracy, twice about 95% accuracy, thrice 96% accuracy. 

