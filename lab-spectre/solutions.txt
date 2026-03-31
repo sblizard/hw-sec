@@ -10,4 +10,13 @@ An attacker would train the branch predictor with "true" values to spectualtivel
 Q4: What is the fewest number of times you need to train the branch on line 9 in Listing 3 to make the attack work?
 2
 
-Q5: 
+Q5: Describe your strategy to extend the speculation window of the target
+branch in the victim.
+I attempted to make the mispredicted branch resolve as slowly as possible in order to increase the length of the speculation window. Before the attack call I evict relevent data from the cache. By pushing the probe array, I forced speculation for any future call that hit one of the pages forced out of cache. 
+
+Q6: Assume you are an attacker looking to exploit a new machine that has the
+same kernel module installed as the one we attacked in lab 2. What information would you need to
+know about this unknown machine to port your attack to the new system? Could it be possible to
+determine that information experimentally? 
+To port the attack an attacker would need to know some machine specific information such as cache timing thresholds, cache size, and how many training iterations are needed to trick the branch predictor. Most of these paramaters can be found imperically by timing memory accesses and tuning variables until a proper signal comes out from the noise.
+ 

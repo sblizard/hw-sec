@@ -2,7 +2,7 @@
  * Exploiting Speculative Execution
  *
  * Part 3
- */
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,8 +14,8 @@
 
 #define PAGE_SIZE 4096
 #define NUM_SLOTS 256
-#define TRIALS 200
-#define TRAIN_PER_ATTACK 20
+#define TRIALS 40 
+#define TRAIN_PER_ATTACK 20 
 #define EVICT_SIZE (11 * 1024 * 1024)
 
 uint8_t *evict_buf;
@@ -28,7 +28,7 @@ uint8_t *evict_buf;
  *  - kernel_fd: A file descriptor to the kernel module
  *  - shared_memory: Memory region to share with the kernel
  *  - offset: The offset into the secret to try and read
- */
+*/
 static inline void call_kernel_part3(int kernel_fd, char *shared_memory, size_t offset) {
     spectre_lab_command local_cmd;
     local_cmd.kind = COMMAND_PART3;
@@ -40,7 +40,7 @@ static inline void call_kernel_part3(int kernel_fd, char *shared_memory, size_t 
 
 
 void init_evict_buf() {
-    // Allocates the eviction buffer for flushing the L3 cache.
+  // Allocates the eviction buffer for flushing the L3 cache.
   evict_buf = malloc(EVICT_SIZE);
 
   // Touch each page.
@@ -108,7 +108,7 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
 
 	// Flush
 	flush_probe_array(shared_memory);
-    	_mm_mfence();
+	_mm_mfence();
 
 	// Attack
     	call_kernel_part3(kernel_fd, shared_memory, offset);
@@ -137,7 +137,7 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
  * Arguments:
  *  - kernel_fd: A file descriptor referring to the lab vulnerable kernel module
  *  - shared_memory: A pointer to a region of memory shared with the kernel
- */
+*/
 int run_attacker(int kernel_fd, char *shared_memory) {
     char leaked_str[SHD_SPECTRE_LAB_SECRET_MAX_LEN];
     size_t current_offset = 0;
