@@ -68,7 +68,7 @@ def main():
         check("part2", 5, b"UNC{g0_h33ls}", 0.80, 30)
     if args.part == '3' or args.part == 'all':
         print("Checking part 3...")
-        check("part3", 5, b"UNC{j4m35_B0nD}", 0.20, 600, pass_once=True)
+        check("part3", 100, b"UNC{j4m35_B0nD}", 0.20, 30)
 
 if __name__=="__main__":
     main()
