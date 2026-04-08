@@ -2,21 +2,21 @@ Q1: How many addresses need to be flused at the first step?
 256, one for each possible byte value.
 
 Q2: Now assume the attacker and victim no longer share a memory region. Would your attack still work? If not, what changes would you need to make to make it work?
-Flush and reload wouldn't be possible without shared memory. Instead, we would need to employ prime and probe methods to extract the victim secret. 
+This would no longer work because the attacker cannot access the same addresses as the victim, meaning the victim will not load a cache line that we would flush, so all reloads would thus be slow. Instead, a prime + probe attack must be implemented to find which cache set the victim accessed, which can leak information on the secret value. 
 
 Q3: In our example, the attacker tries to leak the values in the array secret_part2. In a real-world attack, people use Spectre to leak arbitary values in the victim's address space. Explain how the attacker can achieve this. 
-An attacker would train the branch predictor with "true" values to spectualtively execute. Then to preform the attack, they would access an out of bounds index during the speculation window and leak it through the cache side chanel.
+Since the offset value can be set by the attacker, the attacker can access any address in the victim's address space via the cache covert channel. 
 
 Q4: What is the fewest number of times you need to train the branch on line 9 in Listing 3 to make the attack work?
 2
 
 Q5: Describe your strategy to extend the speculation window of the target
 branch in the victim.
-I attempted to make the mispredicted branch resolve as slowly as possible in order to increase the length of the speculation window. Before the attack call I evict relevent data from the cache. By pushing the probe array, I forced speculation for any future call that hit one of the pages forced out of cache. 
+I attempted to make the mispredicted branch resolve as slowly as possible in order to increase the length of the speculation window. Before the attack call I evict part3_limit from the cache. By pushing the probe array, I forced speculation for any future call that hit one of the pages forced out of cache. 
 
 Q6: Assume you are an attacker looking to exploit a new machine that has the
 same kernel module installed as the one we attacked in lab 2. What information would you need to
 know about this unknown machine to port your attack to the new system? Could it be possible to
 determine that information experimentally? 
-To port the attack an attacker would need to know some machine specific information such as cache timing thresholds, cache size, and how many training iterations are needed to trick the branch predictor. Most of these paramaters can be found imperically by timing memory accesses and tuning variables until a proper signal comes out from the noise.
+To port the attack an attacker would need to know some machine specific information such as cache timing thresholds, cache size, and how many training iterations are needed to trick the branch predictor. Most of these parameters can be found empirically by timing memory accesses and tuning variables until a proper signal comes out from the noise.
  
