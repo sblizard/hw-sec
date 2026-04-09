@@ -23,9 +23,22 @@ void * allocated_mem;
  *               page's physical page number.
  *
  */
-void setup_PPN_VPN_map(void * mem_map,
-                       std::map<uint64_t, uint64_t> &PPN_VPN_map) {
+void setup_PPN_VPN_map(void * mem_map, std::map<uint64_t, uint64_t> &PPN_VPN_map) {
     // TODO: Exercise 1-3
+    uint64_t num_pages = (BUFFER_SIZE_MB * 1024 * 1024) / HUGE_PAGE_SIZE;
+
+    for (uint64_t i = 0; i < num_pages; i++) {
+    	// Vitrural address of the i-th page
+	uint64_t virtural_addr = (uint64_t)mem_map + i * HUGE_PAGE_SIZE;
+
+	// Translate to physical address
+	uint64_t physical_addr = virt_to_phys(virtural_addr);
+
+	uint64_t vpn = virtural_addr >> 21;
+        uint64_t ppn = physical_addr >> 21;
+
+	PPN_VPN_map[ppn] = vpn;
+    }
 }
 
 /*
@@ -81,11 +94,10 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
             if (fread(&entry, sizeof(uint64_t), 1, pagemap)) {
                 if (entry & (1ULL << 63)) {
                     uint64_t phys_page_number = entry & ((1ULL << 54) - 1);
-                    // TODO: Exercise 1-1
-                    // Using the extracted physical page number,
-                    // derive the physical address
-                    phys_addr = 0;
-                } 
+		    // Shift the bits in phys_page_number 12 bits and mask the remaining bits
+		    // Result is the bits associated with physical address
+                    phys_addr = (phys_page_number << 12) | (virt_addr & 0xFFF);
+		} 
             }
         }
         fclose(pagemap);
@@ -108,7 +120,15 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
 
 uint64_t phys_to_virt(uint64_t phys_addr) {
     // TODO: Exercise 1-4
-    return 0;
+    uint64_t ppn = phys_addr >> 21;
+    
+    if (PPN_VPN_map.count(ppn) == 0) {
+        printf("Physical address %ld not mapped.\n", phys_addr);
+        return 0;
+    }
+
+    uint64_t vpn = PPN_VPN_map[ppn];
+    return (vpn << 21) | (phys_addr & (HUGE_PAGE_SIZE - 1));
 }
 
 
