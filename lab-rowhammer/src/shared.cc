@@ -22,9 +22,9 @@ void * allocated_mem;
  *               number is into the map with a key corresponding to the 
  *               page's physical page number.
  *
- */
+*/
 void setup_PPN_VPN_map(void * mem_map, std::map<uint64_t, uint64_t> &PPN_VPN_map) {
-    // TODO: Exercise 1-3
+    // Exercise 1-3
     uint64_t num_pages = (BUFFER_SIZE_MB * 1024 * 1024) / HUGE_PAGE_SIZE;
 
     for (uint64_t i = 0; i < num_pages; i++) {
@@ -41,6 +41,7 @@ void setup_PPN_VPN_map(void * mem_map, std::map<uint64_t, uint64_t> &PPN_VPN_map
     }
 }
 
+
 /*
  * allocate_pages
  *
@@ -51,7 +52,7 @@ void setup_PPN_VPN_map(void * mem_map, std::map<uint64_t, uint64_t> &PPN_VPN_map
  *
  * Inputs: none
  * Outputs: A pointer to the beginning of the allocated memory block
- */
+*/
 void * allocate_pages(uint64_t memory_size) {
     void * memory_block = mmap(NULL, memory_size, PROT_READ | PROT_WRITE,
             MAP_POPULATE | MAP_ANONYMOUS | MAP_PRIVATE | MAP_HUGETLB, -1, 0);
@@ -65,6 +66,7 @@ void * allocate_pages(uint64_t memory_size) {
     return memory_block;
 }
 
+
 /* 
  * virt_to_phys
  *
@@ -75,16 +77,14 @@ void * allocate_pages(uint64_t memory_size) {
  *                    IMPORTANT: If the virtual pointer is not currently
  *                               present, return 0
  *
- */
-
-
+*/
 uint64_t virt_to_phys(uint64_t virt_addr) {
     uint64_t phys_addr = 0;
 
     FILE * pagemap;
     uint64_t entry;
 
-    // TODO: Exercise 1-1
+    // Exercise 1-1
     // Compute the virtual page number from the virtual address
     uint64_t virt_page_number = virt_addr / 0x1000;
     uint64_t file_offset = virt_page_number * sizeof(uint64_t);
@@ -105,6 +105,7 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
     return phys_addr;
 }
 
+
 /*
  * phys_to_virt
  *
@@ -116,10 +117,9 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
  * Output: virt_addr - The virtual address corresponding to the physical pointer
  *                     If the physical pointer is not mapped, return 0
  *
- */
-
+*/
 uint64_t phys_to_virt(uint64_t phys_addr) {
-    // TODO: Exercise 1-4
+    // Exercise 1-4
     uint64_t ppn = phys_addr >> 21;
     
     if (PPN_VPN_map.count(ppn) == 0) {
@@ -141,14 +141,14 @@ uint64_t phys_to_virt(uint64_t phys_addr) {
  * Inputs: allocate buffer size 
  * Output: virt_addr - A random virtual address within the allocated memory
  *
- */
-
+*/
 char* get_rand_addr(size_t buf_size)
 {
     size_t num_cls = buf_size / CACHELINE_SIZE;
     size_t idx = rand64() % num_cls;
     return (char*)allocated_mem + idx * CACHELINE_SIZE;
 }
+
 
 /*
  * measure_bank_latency
@@ -160,11 +160,27 @@ char* get_rand_addr(size_t buf_size)
  *                         potential contention
  * Output: Timing difference (derived by a scheme of your choice)
  *
- */
+*/
 uint64_t measure_bank_latency(volatile char *addr_A, volatile char *addr_B) {
-    // TODO: Exercise 2-2
-    return 0; 
+    // Exercise 2-2
+
+    // Flush addresses out of cache
+    clflush(addr_A);
+    clflush(addr_B);
+    mfence();
+
+    // Access first address, activating the associated DRAM bank
+    one_block_access((uint64_t)addr_A);
+    mfence();
+
+    // Measure latency of accessing second address
+    // High latency -> same DRAM bank
+    // Low latency -> different bank
+    uint64_t latency = measure_one_block_access_time((uint64_t)addr_B);
+
+    return latency;
 }
+
 
 /*
  * phys_to_bankid
@@ -174,13 +190,12 @@ uint64_t measure_bank_latency(volatile char *addr_A, volatile char *addr_B) {
  * Inputs: phys_ptr: a physical address; candidate: the bank function derived from part3
  * Output: bank index
  *
- */
-
+*/
 uint64_t phys_to_bankid(uint64_t phys_ptr, uint8_t candidate)
 {
     static std::array<std::function<uint64_t(uint64_t)>, 3> functions = {
 
-        // candidate 0
+        // candidate 
         [](uint64_t x) {
             return ((get_bit(x, 14) ^ get_bit(x, 17)) << 3) | 
                    ((get_bit(x, 15) ^ get_bit(x, 18)) << 2) | 
@@ -214,6 +229,7 @@ uint64_t phys_to_bankid(uint64_t phys_ptr, uint8_t candidate)
     return functions[candidate](phys_ptr) & 0xF;
 }
 
+
 /*
  * phys_to_rowid
  *
@@ -222,11 +238,11 @@ uint64_t phys_to_bankid(uint64_t phys_ptr, uint8_t candidate)
  * Inputs: phys_ptr: a physical address;
  * Output: row index
  *
- */
-
+*/
 uint64_t phys_to_rowid(uint64_t phys_ptr){
 	return (phys_ptr & ROW_MASK) >> __builtin_ctzl(ROW_MASK);
 }
+
 
 /*
  * phys_to_colid
@@ -236,8 +252,7 @@ uint64_t phys_to_rowid(uint64_t phys_ptr){
  * Inputs: phys_ptr: a physical address;
  * Output: column index
  *
- */
-
+*/
 uint64_t phys_to_colid(uint64_t phys_ptr){
     return (phys_ptr & COL_MASK) >> __builtin_ctzl(COL_MASK);
 }
