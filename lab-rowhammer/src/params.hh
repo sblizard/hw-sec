@@ -22,4 +22,7 @@
 // Number of hammers to perform per iteration
 #define HAMMERS_PER_ITER 5000000
 
+// Bank access threshold
+#define THRESHOLD 270
+
 #endif

@@ -44,6 +44,7 @@ Threshold = 270 cycles
 ## 3-2
 
 **Based on the XOR function you reverse-engineered, determine which of the 16 candidate addresses you derived in Discussion Question 2-1 maps to the same bank.**
+0x96ee7000
 
 ## 4-2
 
