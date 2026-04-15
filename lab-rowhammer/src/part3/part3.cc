@@ -83,9 +83,9 @@ uint64_t median_typesafe(uint64_t* vals, size_t size) {
 */ 
 std::array<std::vector<uint64_t>, BANKS> bin_rows(uint64_t starting_addr, uint64_t final_addr) {
     std::array<std::vector<uint64_t>, BANKS> bins;
-    const int LAT_TRIALS = 50;
+    const int LAT_TRIALS = 70;
     const size_t REPS_PER_BIN = 6;
-    const int MAX_RETRIES = 6;
+    const int MAX_RETRIES = 12;
     
     // Iterate over addresses in range
     for (uint64_t addr = starting_addr; addr < final_addr; addr += 3 * ROW_SIZE) {

