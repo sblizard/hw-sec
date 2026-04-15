@@ -51,7 +51,7 @@ Threshold = 270 cycles
 **Try different data pattern and include the bitflip observation statistics in the table below. Then answer the following questions:**
 | Data Pattern (Victim/Aggressor) | 0x00/0xff | 0xff/0x00 | 0x00/0x00 | 0xff/0xff |
 |---------------------------------|-----------|-----------|-----------|-----------|
-| Number of Flips (100 trials)    |  3515521  |  3861509  |     0     |     3     |
+| Number of Flips (100 trials) | 3515521 | 3861509 | 0 | 3 |
 
 **Do your results match your expectations? What is the best pattern to trigger flips effectively?**
 These match my expectations. The "striped" arrangments yielded the best results compared to the uniform tests. Taking advantage of the capacitor differences gave us better results. The best pattern was 0xff/0x00 for this specific machine and DRAM specs.
@@ -59,6 +59,11 @@ These match my expectations. The "striped" arrangments yielded the best results 
 ## 5-1
 
 **Given the ECC type descriptions listed above, fill in the following table (assuming a data length of 4). For correction/detection, only answer "Yes" if it can always correct/detect (and "No" if there is ever a case where the scheme can fail to correct/detect). We've filled in the first line for you.**
+| Metric | 1-Repetition (No ECC) | 2-Repetition | 3-Repetition | Single Parity Bit | Hamming (7,4) |
+|--------------------------------------|-----------------------|--------------|--------------|-------------------|---------------|
+| Code Rate (Data Bits / Total Bits) | 1.0 | 0.5| 0.33| 0.8 | 0.57 |
+| Max Number of Errors Can Detect | 0 | 4 | 8 | 3 | 3 |
+| Max Number of Errors Can Correct | 0 | 4 | 4 | 0 | 1 |
 
 ## 5-3
 
@@ -67,4 +72,3 @@ These match my expectations. The "striped" arrangments yielded the best results 
 ## 5-5
 
 **Can the Hamming(22,16) code we implemented always protect us from rowhammer attacks? If not, describe how a clever attacker could work around this scheme.**
-
