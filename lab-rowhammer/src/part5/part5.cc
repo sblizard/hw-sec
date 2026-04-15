@@ -1,6 +1,17 @@
 #include "../ecc.hh"
 #include "../verif.hh"
 
+uint32_t xor_bits(uint32_t data, uint8_t bit_included[][16], int32_t bit_num)
+{
+    uint32_t parity = 0;
+    for (size_t i = 0; i < 16; i++)
+    {
+        parity ^= bit_included[bit_num][i] * getBit(data, i);
+    }
+
+    return parity;
+}
+
 // Convenience Array
 //
 // Value for row x column y is 1 iff
@@ -17,9 +28,18 @@ uint32_t genParity(uint32_t data)
 {
     uint32_t parity = 0;
 
-    // TODO: Exercise 5-2, Generate the parity bits for the data
-
-    return parity;
+    // Exercise 5-2, Generate the parity bits for the data
+    uint32_t p0 = xor_bits(data, parity_eqs, 0);
+    uint32_t p1 = xor_bits(data, parity_eqs, 1);
+    uint32_t p2 = xor_bits(data, parity_eqs, 2);
+    uint32_t p3 = xor_bits(data, parity_eqs, 3);
+    uint32_t p4 = xor_bits(data, parity_eqs, 4);
+    uint32_t p5 = p0 ^ p1 ^ p2 ^ p3 ^ p4;
+    for (int i = 0; i < 16; i++)
+    {
+        p5 ^= getBit(data, i);
+    }
+    return p5;
 }
 
 // Determine if there are any errors, reporting the error type and syndrome.
