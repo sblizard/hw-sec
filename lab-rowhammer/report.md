@@ -68,7 +68,13 @@ These match my expectations. The "striped" arrangments yielded the best results 
 ## 5-3
 
 **When a single bit flip is detected, describe how Hamming(22,16) can correct this error.**
+If syndrom = 0, overall parity = 1:
+    Flip overall parity bit
+If syndrom = n > 0, overall parity = 1:
+    Flip bit n
 
 ## 5-5
 
 **Can the Hamming(22,16) code we implemented always protect us from rowhammer attacks? If not, describe how a clever attacker could work around this scheme.**
+Blacksmith has shown us that rowhammer can be used to flip multiple bits simultaneously. If we flip multiple bits in the same hamming codeword, an attacker can either flip the bits to an unrepareable state, or ideally, transform one codeword into another valid codeword through the flipping of multiple specific bits.  
+
