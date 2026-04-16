@@ -26,7 +26,7 @@ void * allocated_mem;
 void setup_PPN_VPN_map(void * mem_map,
                        std::map<uint64_t, uint64_t> &PPN_VPN_map) {
     // TODO: Exercise 1-3
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < 1024; i++) {
 	uint64_t VA = mem_map[i * 1024*1024*2*sizeof(uint64_t)];
 	uint64_t VPN = VA / 0x100000;
 	uint64_t PA = virt_to_phys(VA);
@@ -115,7 +115,9 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
 
 uint64_t phys_to_virt(uint64_t phys_addr) {
     // TODO: Exercise 1-4
-    return 0;
+    uint64_t PPN = phys_addr / 0x100000;
+    uint64_t VPN = PPN_VPN_map[PPN];
+	return VPN * 0x100000;
 }
 
 
