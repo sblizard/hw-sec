@@ -29,6 +29,24 @@ uint64_t hammer_addresses(uint64_t vict, uint64_t attA, uint64_t attB, uint64_t 
                       
     uint64_t foundFlips = 0;
     // TODO: Exercise 4-1
+    memset((void *)vict, 0, ROW_SIZE);
+    memset((void *)attA, 1, ROW_SIZE);
+    memset((void *)attB, 1, ROW_SIZE);
+    for(uint64_t i = 0; i < ROW_SIZE; i+= sizeof(uint64_t)) {
+	clflush((volatile char *)attA + i);
+	clflush((volatile char*)attB + i);
+    }
+    for(uint64_t k = 0; k < 5000000; k++) {
+	(volatile char*)attA;
+	clflush((volatile char*)attA);
+	(volatile char*)attB;
+	clflush((volatile char*)attB);
+    }
+    for(int j = 0; j < 1<<13; j++) {
+	if((volatile uint64_t*)(vict + j) != 0) {
+		foundFlips++;
+	}
+    }
     return foundFlips; 
 }
 
