@@ -11,7 +11,7 @@
 #define BANKS 16
 #define CONSISTENCY_RATE 0.95
 // TODO: Threshold derived in part2
-#define THRESHOLD 1000 
+#define THRESHOLD 580 
 #define POOL_SIZE 1000
 #define ROUNDS  100
 
@@ -54,6 +54,37 @@ uint64_t median(uint64_t* vals, size_t size) {
 std::array<std::vector<uint64_t>, BANKS> bin_rows(uint64_t starting_addr, uint64_t final_addr) {
     // TODO - Exercise 3-1
     std::array<std::vector<uint64_t>, BANKS> bins;
+    for(int i = starting_addr; i < final_addr; i+=256) {
+	int  candidate = -1;
+	int empty = 0;
+	for(int j = 0; j < 16; j++) {
+		if(bins[j].empty()) {
+			empty++;
+		}
+		else {
+			uint64_t sum = 0;
+			for(int k = 0; k < bins[j].size(); k++) {
+				sum += measure_bank_latency(reinterpret_cast<volatile char*>(i), reinterpret_cast<volatile char*>(bins[j][k]));
+			}
+			sum = sum / bins[j].size();
+			if(sum > THRESHOLD) {
+				candidate = j;
+			}
+		}
+	}
+	if(candidate != -1) {
+		bins[candidate][bins[candidate].size()] = i;
+	}
+	else if(empty > 0) {
+		int e = 0;
+		for(int l = 1; l < 16; l++) {
+			if(bins[l].empty()) {
+				e = l;
+			}
+		}
+		bins[e][0] = i;
+	}
+    }
     return bins;
 }
 
