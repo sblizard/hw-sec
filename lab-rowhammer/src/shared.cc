@@ -27,7 +27,7 @@ void setup_PPN_VPN_map(void * mem_map,
                        std::map<uint64_t, uint64_t> &PPN_VPN_map) {
     // TODO: Exercise 1-3
     for(int i = 0; i < 1024; i++) {
-	uint64_t VA = mem_map[i * 1024*1024*2*sizeof(uint64_t)];
+	uint64_t VA = (uint64_t)mem_map + i * 1024*1024*2*sizeof(uint64_t);
 	uint64_t VPN = VA / 0x100000;
 	uint64_t PA = virt_to_phys(VA);
 	uint64_t PPN = PA / 0x100000;
@@ -91,7 +91,7 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
                     // TODO: Exercise 1-1
                     // Using the extracted physical page number,
                     // derive the physical address
-                    phys_addr = phys_page_number << 0x1000;
+                    phys_addr = phys_page_number * 0x1000;
                 } 
             }
         }
@@ -116,6 +116,9 @@ uint64_t virt_to_phys(uint64_t virt_addr) {
 uint64_t phys_to_virt(uint64_t phys_addr) {
     // TODO: Exercise 1-4
     uint64_t PPN = phys_addr / 0x100000;
+    if(!PPN_VPN_map.contains(PPN)) {
+	return 0; 
+    }
     uint64_t VPN = PPN_VPN_map[PPN];
 	return VPN * 0x100000;
 }
@@ -152,7 +155,15 @@ char* get_rand_addr(size_t buf_size)
  */
 uint64_t measure_bank_latency(volatile char *addr_A, volatile char *addr_B) {
     // TODO: Exercise 2-2
-    return 0; 
+    //clflush both addresses
+    //measure time
+    //access both addresses
+    //measure time again
+    clflush(addr_A);
+    clflush(addr_B);
+    uint64_t a = measure_one_block_access_time((uint64_t)addr_A);
+    uint64_t b = measure_one_block_access_time((uint64_t)addr_B);  
+	return a + b;
 }
 
 /*
