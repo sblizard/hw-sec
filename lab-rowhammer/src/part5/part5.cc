@@ -18,7 +18,38 @@ uint32_t genParity(uint32_t data) {
     uint32_t parity = 0;
 
     // TODO: Exercise 5-2, Generate the parity bits for the data
-    
+    int d0 = data & 1;
+    int d1 = data >> 1 & 1;
+    int d2 = data >> 2 & 1;
+    int d3 = data >> 3 & 1;
+    int d4 = data >> 4 & 1;
+    int d5 = data >> 5 & 1;
+    int d6 = data >> 6 & 1;
+    int d7 = data >> 7 & 1;
+    int d8 = data >> 8 & 1;
+    int d9 = data >> 9 & 1;
+    int d10 = data >> 10 & 1;
+    int d11 = data >> 11 & 1;
+    int d12 = data >> 12 & 1;
+    int d13 = data >> 13 & 1;
+    int d14 = data >> 14 & 1;
+    int d15 = data >> 15 & 1;
+    int p0 = d15 ^ d13 ^ d11 ^ d10 ^ d8 ^ d6 ^ d4 ^ d3 ^ d1 ^ d0;
+    int p1 = d13 ^ d12 & d10 ^ d9 ^ d6 ^ d5 ^ d3 ^ d2 ^ d0;
+    int p2 = d15 ^ d14 ^ d10 ^ d9 ^ d8 ^ d7 ^ d3 ^ d2 ^ d1;
+    int p3 = d10 ^ d9 ^ d8 ^ d7 ^ d6 ^ d5 ^ d4;
+    int p4 = d15 ^ d14 ^ d13 ^ d12 ^ d11;
+    int p5 = d0 ^ d1 ^ d2 ^ d3 ^ d4 ^ d5 ^ d6 ^ d7 ^ d8 ^ d9 ^ d10 ^ d11 ^ d12 ^ d13 ^ d14 ^ d15 ^ p0 ^ p1 ^ p2 ^ p3 ^ p4;
+    //printf("%d %d %d %d %d %d", p0, p1, p2, p3, p4, p5);
+    //int p0 = data >> 15 & 1 ^ data >> 13 & 1 ^ (data >> 11) & 1 ^ (data >> 10) & 1 ^ (data >> 8) & 1 ^ (data >> 6) & 1 ^ (data >> 4) & 1 ^ (data >> 3) & 1 ^ (data >> 1) & 1 ^ data & 1;
+    //int p1 = data >> 13 & 1 ^ data >> 12 & 1 ^ data >> 10 & 1 ^ data >> 9 & 1 ^ data >> 6 & 1 ^ data >> 5 & 1 ^ data >> 3 & 1 ^ data >> 2 & 1 ^ data & 1;
+    //int p2 = data >> 15 & 1 >> data >> 14 & 1 ^ data >> 10 & 1 ^ data >> 9 & 1 ^ data >> 8 & 1 ^ data >> 7 & 1 ^ data >> 3 & 1 ^ data >> 2 & 1 ^ data >> 1 & 1;
+    //int p3 = data >> 10 & 1 ^ data >> 9 & 1 ^ data >> 8 & 1 ^ data >> 7 & 1 ^ data >> 6 & 1 ^ data >> 5 & 1 ^ data >> 4 & 1;
+    //int p4 = data >> 15 & 1 ^ data >> 14 & 1 ^ data >> 13 & 1 ^ data >> 12 & 1 ^ data >> 11 & 1;
+    //int p5 = data >> 15 & 1 ^ data >> 14 & 1 ^ data >> 13 & 1 ^ data >> 12 & 1 ^ data >> 11 & 1 ^ data >> 10 & 1 ^ data >> 9 & 1 ^ data >> 8 & 1 ^ data >> 7 & 1 ^ data >> 6 & 1 ^ data >> 5 & 1 ^ data >> 4 & 1 ^ data >> 3 & 1 ^ data >> 2 & 1 ^ data >> 1 & 1 ^ data & 1 ^ p0 ^ p1 ^ p2 ^ p3 ^ p4;
+    parity = p0 + p1*2 + p2*4 + p3*8 + p4*16 + p5*32;
+    //printf("%d", p0 + p1*2);
+    //printf("%d %d", p2*4 + p3*8, p4*16 + p5*32);
     return parity;
 }
 
