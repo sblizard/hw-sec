@@ -65,13 +65,25 @@ struct hamming_result findHammingErrors(uint32_t encoded) {
     uint32_t regenParity = genParity(decoded.data);
 
     // TODO: Exercise 5-4, Compute the syndrome
-    uint32_t syndrome = 0;
+    uint32_t syndrome = recordedParity ^ regenParity % 32;
 
     // TODO: Exercise 5-4, Compute P5 Error bit
-    uint32_t P5_Error_bit = 0;
- 
+    uint32_t P5_Error_bit = decoded.data >> 15 & 1 ^ decoded.data >> 14 & 1 ^ decoded.data >> 13 & 1 ^ decoded.data >> 12 & 1 ^ decoded.data >> 11 & 1 ^ decoded.data >> 10 & 1 ^ decoded.data >> 9 & 1 ^ decoded.data >> 8 & 1 ^ decoded.data >> 7 & 1 ^ decoded.data >> 6 & 1 ^ decoded.data >> 5 & 1 ^ decoded.data >> 4 & 1 ^ decoded.data >> 3 & 1 ^ decoded.data >> 2 & 1 ^ decoded.data >> 1 & 1 ^ decoded.data & 1 ^ decoded.parity >> 5 & 1 ^ decoded.parity >> 4 & 1 ^ decoded.parity >> 3 & 1 ^ decoded.parity >> 2 & 1 ^ decoded.parity >> 1 & 1 ^ decoded.parity & 1;
+
     // TODO: Exercise 5-4, Determine the error type
     _ERROR_TYPE error = NO_ERROR;
+    if(syndrome == 0 && P5_Error_bit == 0) {
+        error = NO_ERROR;
+    }
+    else if(syndrome == 0) {
+        error = P5_ERROR;
+    }
+    else if(P5_Error_bit == 1) {
+        error = SINGLE_ERROR;
+    }
+    else {
+        error = DOUBLE_ERROR;
+    }
     
     return {error, syndrome};
 }
@@ -85,7 +97,13 @@ uint32_t verifyAndRepair(uint32_t encoded) {
 
     // TODO: Exercise 5-4, If the error type is correctable, correct it here!
     uint32_t out = encoded;
-
+    if(encoded.error == SINGLE_ERROR) {
+        out = out ^ (1 << (syndrome - 1));
+    }
+    else if(encoded.error == P5_ERROR) {
+        out = out ^ (1 << 21);
+    }
+    
     return out;
 }
 
