@@ -10,7 +10,8 @@
 
 #define NUM_ITERATIONS 100
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     setvbuf(stdout, NULL, _IONBF, 0);
 
     // Allocate a large pool of memory (of size BUFFER_SIZE_MB)
@@ -22,7 +23,6 @@ int main(int argc, char** argv) {
     // Setup, then verify the PPN_VPN_map
     setup_PPN_VPN_map(allocated_mem, PPN_VPN_map);
     verify_PPN_VPN_map(allocated_mem, PPN_VPN_map);
-    
-    verify_phys_to_virt(allocated_mem, &phys_to_virt);
 
+    verify_phys_to_virt(allocated_mem, &phys_to_virt);
 }

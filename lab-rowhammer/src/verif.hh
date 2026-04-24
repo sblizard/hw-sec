@@ -8,7 +8,6 @@
 #include "params.hh"
 #include "ecc.hh"
 
-
 // part 1 checker
 void verify_phys_to_virt(void *mem_map, uint64_t (*fun)(uint64_t));
 void verify_virt_to_phys(void *mem_map, uint64_t (*fun)(uint64_t));
