@@ -54,7 +54,7 @@ Threshold = 270 cycles
 | Number of Flips (100 trials) | 3515521 | 3861509 | 0 | 3 |
 
 **Do your results match your expectations? What is the best pattern to trigger flips effectively?**
-These match my expectations. The "striped" arrangments yielded the best results compared to the uniform tests. Taking advantage of the capacitor differences gave us better results. The best pattern was 0xff/0x00 for this specific machine and DRAM specs.
+These match my expectations. The "striped" arrangments yielded the best results compared to the uniform tests. Taking advantage of the charge differences in the capacitors gave us better results. The best pattern was 0xff/0x00 for this specific machine and DRAM specs.
 
 ## 5-1
 
@@ -62,19 +62,18 @@ These match my expectations. The "striped" arrangments yielded the best results 
 | Metric | 1-Repetition (No ECC) | 2-Repetition | 3-Repetition | Single Parity Bit | Hamming (7,4) |
 |--------------------------------------|-----------------------|--------------|--------------|-------------------|---------------|
 | Code Rate (Data Bits / Total Bits) | 1.0 | 0.5| 0.33| 0.8 | 0.57 |
-| Max Number of Errors Can Detect | 0 | 4 | 8 | 3 | 3 |
-| Max Number of Errors Can Correct | 0 | 4 | 4 | 0 | 1 |
+| Max Number of Errors Can Detect | 0 | 1 | 2 | 1 | 2 |
+| Max Number of Errors Can Correct | 0 | 0 | 1 | 0 | 1 |
 
 ## 5-3
 
 **When a single bit flip is detected, describe how Hamming(22,16) can correct this error.**
 If syndrom = 0, overall parity = 1:
-    Flip overall parity bit
+Flip overall parity bit
 If syndrom = n > 0, overall parity = 1:
-    Flip bit n
+Flip bit n
 
 ## 5-5
 
 **Can the Hamming(22,16) code we implemented always protect us from rowhammer attacks? If not, describe how a clever attacker could work around this scheme.**
-Blacksmith has shown us that rowhammer can be used to flip multiple bits simultaneously. If we flip multiple bits in the same hamming codeword, an attacker can either flip the bits to an unrepareable state, or ideally, transform one codeword into another valid codeword through the flipping of multiple specific bits.  
-
+Blacksmith has shown us that rowhammer can be used to flip multiple bits simultaneously. If we flip multiple bits in the same hamming codeword, an attacker can either flip the bits to an unrepareable state, or ideally, transform one codeword into another valid codeword through the flipping of multiple specific bits.
